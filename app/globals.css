@@ -5,13 +5,6 @@
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -23,4 +16,361 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* Scroll animation */
+.block {
+  animation-name: appear;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+
+  /* Scroll-driven animation */
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+}
+
+/* pop-in */
+.pop-in {
+  animation: popIn 1.5s ease-in-out;
+}
+
+.pop-in1 {
+  animation: popIn 2s ease-in-out;
+}
+
+.pop-in2 {
+  animation: popIn 3s ease-in-out;
+}
+
+.pop-in3 {
+  animation: popIn 3.5s ease-in-out;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ================================
+   3D FEATURES CAROUSEL — FINAL
+================================ */
+
+/* Section Features (sécurité layout) */
+#features {
+  position: relative;
+  z-index: 1;
+}
+
+/* ================================
+   CAROUSEL CONTAINER
+================================ */
+
+.carousel {
+  position: relative;
+  width: 520px;
+  height: 420px; /* 🔧 hauteur réduite */
+  margin: 0 auto;
+  perspective: 1200px;
+  isolation: isolate;
+}
+
+/* ================================
+   CAROUSEL TRACK (ROTATION AXIS)
+================================ */
+
+.carousel-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  animation: rotateCarousel 32s linear infinite;
+}
+
+.carousel-track:hover {
+  animation-play-state: paused;
+}
+
+/* ================================
+   CAROUSEL ITEM (CARD)
+================================ */
+
+.carousel-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  width: 320px;
+  height: 360px;
+
+  transform-style: preserve-3d;
+  transform-origin: center center;
+
+  /* 🚫 PAS de translate(-50%, -50%) */
+  transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity))))
+    translateZ(520px);
+
+  /* centrage réel */
+  margin-left: -160px;
+  margin-top: -180px;
+
+  opacity: 0.85;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+/* Carte visible (avant) */
+.carousel-item:nth-child(1) {
+  opacity: 1;
+}
+
+/* Empêche miroir arrière */
+.carousel-item > div {
+  backface-visibility: hidden;
+}
+
+/* ================================
+   ROTATION ANIMATION
+================================ */
+
+@keyframes rotateCarousel {
+  from {
+    transform: rotateX(-16deg) rotateY(0deg);
+  }
+  to {
+    transform: rotateX(-16deg) rotateY(360deg);
+  }
+}
+
+/* ================================
+   RESPONSIVE — MOBILE FALLBACK
+================================ */
+
+@media (max-width: 768px) {
+  .carousel {
+    width: 100%;
+    height: auto;
+    perspective: none;
+  }
+
+  .carousel-track {
+    animation: none;
+    transform: none;
+  }
+
+  .carousel-item {
+    position: relative;
+    transform: none;
+    margin: 0 auto 2rem auto;
+    width: 100%;
+    height: auto;
+    opacity: 1;
+  }
+}
+
+/* ===== Hero mobile spacing fix ===== */
+@media (max-width: 768px) {
+  .hero-mobile-fix {
+    padding-top: 8rem;
+  }
+}
+
+/* ========================= */
+/* MOBILE : infinite horizontal scroll */
+/* ========================= */
+
+@media (max-width: 639px) {
+  .carousel {
+    height: auto;
+    perspective: none;
+    overflow: hidden;
+  }
+
+  .carousel-track {
+    position: relative;
+    display: flex;
+    gap: 1rem;
+    width: max-content;
+    transform: none !important;
+    animation: features-scroll 22s linear infinite;
+  }
+
+  .carousel-item {
+    position: relative;
+    transform: none !important;
+    width: 260px;
+    flex-shrink: 0;
+  }
+}
+
+/* Animation scroll infini */
+@keyframes features-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 639px) {
+  .carousel-track:hover {
+    animation-play-state: paused;
+  }
+}
+
+/* ========================= */
+/* VISIBILITY RULES */
+/* ========================= */
+
+.features-carousel {
+  display: none;
+}
+
+.features-scroll {
+  display: none;
+}
+
+.features-grid {
+  display: none;
+}
+
+/* ========================= */
+/* >= 1300px → carousel */
+/* ========================= */
+
+@media (min-width: 1300px) {
+  .features-carousel {
+    display: block;
+  }
+}
+
+/* ========================= */
+/* 500px – 1299px → infinite scroll */
+/* ========================= */
+
+@media (max-width: 1299px) and (min-width: 500px) {
+  .features-scroll {
+    display: block;
+  }
+
+  .features-track {
+    display: flex;
+    gap: 1rem;
+    width: max-content;
+    animation: features-scroll 25s linear infinite;
+  }
+
+  .features-card {
+    width: 260px;
+    flex-shrink: 0;
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* ========================= */
+/* < 500px → grid + animation */
+/* ========================= */
+
+@media (max-width: 499px) {
+  .features-grid {
+    display: block;
+  }
+
+  .features-grid .features-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+
+    /* animation */
+    animation: card-in 0.6s ease-out both;
+  }
+
+  .features-grid .features-card:nth-child(1) {
+    animation-delay: 0.05s;
+  }
+  .features-grid .features-card:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+  .features-grid .features-card:nth-child(3) {
+    animation-delay: 0.15s;
+  }
+  .features-grid .features-card:nth-child(4) {
+    animation-delay: 0.2s;
+  }
+  .features-grid .features-card:nth-child(5) {
+    animation-delay: 0.25s;
+  }
+  .features-grid .features-card:nth-child(6) {
+    animation-delay: 0.3s;
+  }
+  .features-grid .features-card:nth-child(7) {
+    animation-delay: 0.35s;
+  }
+  .features-grid .features-card:nth-child(8) {
+    animation-delay: 0.4s;
+  }
+
+  /* micro-interaction tactile */
+  .features-grid .features-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .features-grid .features-card:active {
+    transform: scale(0.97);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+}
+
+/* ========================= */
+/* Animations */
+/* ========================= */
+
+@keyframes features-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
