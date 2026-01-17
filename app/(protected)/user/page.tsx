@@ -39,10 +39,7 @@ const getNextDatesForDay = (dayOfWeek: number, weeksAhead = 4): Date[] => {
   for (let i = 0; i < weeksAhead * 7; i++) {
     const d = new Date();
     d.setDate(today.getDate() + i);
-
-    if (d.getDay() === dayOfWeek) {
-      dates.push(d);
-    }
+    if (d.getDay() === dayOfWeek) dates.push(d);
   }
 
   return dates;
@@ -112,7 +109,6 @@ export default function UserPage() {
       setAvailabilities(data || []);
 
       const dates: CalendarDate[] = [];
-
       (data || []).forEach((a) => {
         getNextDatesForDay(a.day_of_week).forEach((d) => {
           dates.push({ date: d, dayOfWeek: a.day_of_week });
@@ -149,7 +145,6 @@ export default function UserPage() {
         m = 0;
       }
     }
-
     return slots;
   };
 
@@ -298,14 +293,13 @@ export default function UserPage() {
                     key={time}
                     disabled={isBooked}
                     onClick={() => !isBooked && setSelectedTime(time)}
-                    className={`px-3 py-1 rounded-md text-sm border
-                      ${
-                        isBooked
-                          ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                          : selectedTime === time
-                          ? "bg-blue-600 text-white border-blue-600"
-                          : "hover:bg-gray-100"
-                      }`}
+                    className={`px-3 py-1 rounded-md text-sm border transition ${
+                      isBooked
+                        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                        : selectedTime === time
+                        ? "bg-blue-600 text-white border-blue-600"
+                        : "hover:bg-gray-100"
+                    }`}
                   >
                     {time}
                   </button>
@@ -339,7 +333,6 @@ export default function UserPage() {
             value={patient.phone}
             onChange={(e) => setPatient({ ...patient, phone: e.target.value })}
           />
-
           <textarea
             placeholder="Notes"
             rows={3}
