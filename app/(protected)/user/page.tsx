@@ -25,6 +25,11 @@ type CalendarDate = {
   dayOfWeek: number;
 };
 
+type TimeSlot = {
+  time: string;
+  isBooked: boolean;
+};
+
 /* ================= UTILS ================= */
 
 const getNextDatesForDay = (dayOfWeek: number, weeksAhead = 4): Date[] => {
@@ -50,7 +55,7 @@ const formatDateLabel = (date: Date) =>
     month: "short",
   });
 
-const formatDateValue = (date: Date) => date.toISOString().split("T")[0]; // YYYY-MM-DD
+const formatDateValue = (date: Date) => date.toISOString().split("T")[0];
 
 /* ================= PAGE ================= */
 
@@ -72,7 +77,7 @@ export default function UserPage() {
   /* 📅 Availability */
   const [availabilities, setAvailabilities] = useState<Availability[]>([]);
   const [calendarDates, setCalendarDates] = useState<CalendarDate[]>([]);
-  const [availableTimes, setAvailableTimes] = useState<string[]>([]);
+  const [availableTimes, setAvailableTimes] = useState<TimeSlot[]>([]);
 
   /* 📅 Selected */
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -166,11 +171,17 @@ export default function UserPage() {
       .from("appointments")
       .select("appointment_time")
       .eq("doctor_email", selectedDoctor.email)
-      .eq("appointment_date", dateStr);
+      .eq("appointment_date", dateStr)
+      .in("status", ["pending", "paid"]);
 
     const bookedSlots = booked?.map((b) => b.appointment_time) || [];
 
-    setAvailableTimes(slots.filter((t) => !bookedSlots.includes(t)));
+    const timesWithStatus: TimeSlot[] = slots.map((time) => ({
+      time,
+      isBooked: bookedSlots.includes(time),
+    }));
+
+    setAvailableTimes(timesWithStatus);
   };
 
   /* ================= LOGOUT ================= */
@@ -209,47 +220,18 @@ export default function UserPage() {
       .single();
 
     if (error) {
-      if (error.code === "23505") {
-        alert("This time slot is already booked.");
-      } else {
-        alert("Error creating appointment");
-      }
+      alert("This time slot is already booked.");
       return;
     }
 
-    /* 📩 SEND EMAIL NOTIFICATION */
-    await fetch("/api/appointments/notify", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        patient_email: patient.email,
-        patient_name: patient.fullName,
-        doctor_email: selectedDoctor.email,
-        doctor_name: selectedDoctor.full_name,
-        appointment_date: formatDateValue(selectedDate),
-        appointment_time: selectedTime,
-        status: "pending",
-      }),
-    });
-
-    /* 💳 STRIPE CHECKOUT */
     const res = await fetch("/api/stripe/checkout", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        appointmentId: appointment.id,
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ appointmentId: appointment.id }),
     });
 
     const stripeData = await res.json();
-
-    if (stripeData.url) {
-      window.location.href = stripeData.url;
-    } else {
-      alert("Payment initialization failed");
-    }
+    if (stripeData.url) window.location.href = stripeData.url;
   };
 
   /* ================= UI ================= */
@@ -290,44 +272,40 @@ export default function UserPage() {
         <div className="bg-white p-6 rounded-xl shadow">
           <h2 className="font-semibold mb-4">Choose Date & Time</h2>
 
-          {calendarDates.length === 0 && (
-            <p className="text-sm text-gray-500 text-center mt-10">
-              This doctor has no available slots yet.
-            </p>
-          )}
-
-          {calendarDates.length > 0 && (
-            <div className="grid grid-cols-3 gap-2 text-sm">
-              {calendarDates.map((d) => (
-                <div
-                  key={formatDateValue(d.date)}
-                  onClick={() => handleSelectDate(d)}
-                  className={`p-2 border rounded cursor-pointer text-center ${
-                    selectedDate &&
-                    formatDateValue(selectedDate) === formatDateValue(d.date)
-                      ? "bg-blue-600 text-white"
-                      : "hover:bg-gray-100"
-                  }`}
-                >
-                  {formatDateLabel(d.date)}
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="grid grid-cols-3 gap-2 text-sm">
+            {calendarDates.map((d) => (
+              <div
+                key={formatDateValue(d.date)}
+                onClick={() => handleSelectDate(d)}
+                className={`p-2 border rounded cursor-pointer text-center ${
+                  selectedDate &&
+                  formatDateValue(selectedDate) === formatDateValue(d.date)
+                    ? "bg-blue-600 text-white"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                {formatDateLabel(d.date)}
+              </div>
+            ))}
+          </div>
 
           {selectedDate && (
             <>
               <p className="text-sm font-semibold mt-6 mb-2">Select Time</p>
               <div className="flex flex-wrap gap-2">
-                {availableTimes.map((time) => (
+                {availableTimes.map(({ time, isBooked }) => (
                   <button
                     key={time}
-                    onClick={() => setSelectedTime(time)}
-                    className={`px-3 py-1 rounded-md text-sm border ${
-                      selectedTime === time
-                        ? "bg-blue-600 text-white border-blue-600"
-                        : "hover:bg-gray-100"
-                    }`}
+                    disabled={isBooked}
+                    onClick={() => !isBooked && setSelectedTime(time)}
+                    className={`px-3 py-1 rounded-md text-sm border
+                      ${
+                        isBooked
+                          ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                          : selectedTime === time
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "hover:bg-gray-100"
+                      }`}
                   >
                     {time}
                   </button>
@@ -361,6 +339,7 @@ export default function UserPage() {
             value={patient.phone}
             onChange={(e) => setPatient({ ...patient, phone: e.target.value })}
           />
+
           <textarea
             placeholder="Notes"
             rows={3}
@@ -372,7 +351,7 @@ export default function UserPage() {
           <button
             onClick={createAppointment}
             disabled={!selectedDate || !selectedTime}
-            className="w-full bg-blue-600 text-white py-2 rounded-md"
+            className="w-full bg-blue-600 text-white py-2 rounded-md disabled:opacity-50"
           >
             Confirm Appointment
           </button>

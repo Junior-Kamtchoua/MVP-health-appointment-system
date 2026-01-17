@@ -36,7 +36,9 @@ export async function POST(req: Request) {
     );
   }
 
-  // ✅ Paiement confirmé par Stripe
+  /* ======================================================
+     ✅ PAIEMENT CONFIRMÉ
+  ====================================================== */
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
 
@@ -49,8 +51,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 🔁 Mettre la réservation à "paid" et récupérer les infos
-    // 🔁 Mettre la réservation à "paid" et récupérer les infos
+    // 🔁 Mettre la réservation à "paid"
     const { data: appointment, error } = await supabase
       .from("appointments")
       .update({ status: "paid" })
@@ -65,7 +66,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 💾 Enregistrer le paiement dans la table payments
+    // 💾 Enregistrer le paiement
     await supabase.from("payments").insert({
       appointment_id: appointment.id,
       user_id: appointment.patient_id,
@@ -79,7 +80,7 @@ export async function POST(req: Request) {
       status: "paid",
     });
 
-    // 📧 Email automatique après paiement
+    // 📧 Email après paiement
     await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/appointments/notify`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -93,6 +94,35 @@ export async function POST(req: Request) {
         status: "paid",
       }),
     });
+  }
+
+  /* ======================================================
+     ❌ PAIEMENT ABANDONNÉ / SESSION EXPIRÉE
+  ====================================================== */
+  if (event.type === "checkout.session.expired") {
+    const session = event.data.object as Stripe.Checkout.Session;
+
+    const appointmentId = session.metadata?.appointment_id;
+
+    if (!appointmentId) {
+      return NextResponse.json(
+        { error: "Missing appointment_id" },
+        { status: 400 }
+      );
+    }
+
+    // 🔓 Libérer le créneau
+    const { error } = await supabase
+      .from("appointments")
+      .update({ status: "expired" })
+      .eq("id", appointmentId);
+
+    if (error) {
+      return NextResponse.json(
+        { error: "Failed to expire appointment" },
+        { status: 500 }
+      );
+    }
   }
 
   return NextResponse.json({ received: true });
