@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <section className="relative w-full pt-20 hero-mobile-fix bg-gradient-to-br from-blue-50 to-white">
+    <section className="relative w-full pt-20 hero-mobile-fix bg-linear-to-br from-blue-50 to-white">
       <div
         className="relative z-10 max-w-7xl mx-auto
                    min-h-[calc(100vh-80px)]
@@ -13,8 +13,8 @@ export default function Hero() {
         {/* ================= LEFT : VIDEO ================= */}
         <div className="w-full md:w-[60%] flex items-center justify-center">
           <div
-            className="relative w-full max-w-[700px]
-                       aspect-[16/10]
+            className="relative w-full max-w-175
+                       aspect-16/10
                        rounded-3xl
                        bg-blue-200
                        p-4 md:p-5"

@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
 
 import AppointmentsChart from "@/components/admin/AppointmentsChart";
 import AppointmentsStatusPie from "@/components/admin/AppointmentsStatusPie";
@@ -53,8 +51,6 @@ const statusBadge = (status: string) => {
 /* ================= PAGE ================= */
 
 export default function AdminPage() {
-  const router = useRouter();
-
   const [stats, setStats] = useState<Stats | null>(null);
   const [recentAppointments, setRecentAppointments] = useState<
     RecentAppointment[]
@@ -62,8 +58,9 @@ export default function AdminPage() {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [statusFilter, setStatusFilter] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [today, setToday] = useState("");
 
-  /* ================= FETCH DATA ================= */
+  /* ================= FETCH ================= */
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,14 +82,8 @@ export default function AdminPage() {
     };
 
     fetchData();
+    setToday(new Date().toLocaleDateString());
   }, []);
-
-  /* ================= LOGOUT ================= */
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push("/login");
-  };
 
   const filteredAppointments =
     statusFilter === "all"
@@ -102,97 +93,70 @@ export default function AdminPage() {
   /* ================= UI ================= */
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
-      {/* ================= SIDEBAR ================= */}
-      {/* ❗ Cachée sur mobile */}
-      <aside className="hidden lg:flex w-64 bg-white border-r flex-col">
-        <div className="p-6 border-b">
-          <h2 className="text-xl font-bold">Clinic Admin</h2>
-          <p className="text-xs text-gray-500">Dashboard</p>
-        </div>
-
-        <div className="p-6 flex items-center gap-3 border-b">
-          <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
-            A
-          </div>
-          <div>
-            <p className="text-sm font-semibold">Administrator</p>
-            <p className="text-xs text-gray-500">admin</p>
-          </div>
-        </div>
-
-        <nav className="flex-1 p-6 space-y-3 text-sm">
-          <p className="font-semibold text-blue-600">Dashboard</p>
-          <p className="text-gray-600">Appointments</p>
-          <p className="text-gray-600">Doctors</p>
-          <p className="text-gray-600">Patients</p>
-        </nav>
-
-        <div className="p-6 border-t">
-          <button onClick={handleLogout} className="text-red-600 text-sm">
-            Logout
-          </button>
-        </div>
-      </aside>
-
-      {/* ================= MAIN ================= */}
-      {/* ❗ Padding responsive */}
-      <main className="flex-1 p-4 sm:p-6 lg:p-8">
-        {/* HEADER */}
-        <div className="mb-8">
-          <h1 className="text-xl sm:text-2xl font-semibold">
-            Welcome back, <span className="text-blue-600">Admin</span> 👋
-          </h1>
-          <p className="text-sm text-gray-500">
-            Here’s the latest overview of your clinic.
+    <div className="space-y-12">
+      {/* HEADER */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Welcome back,{" "}
+            <span className="font-medium text-blue-600">Admin</span>
           </p>
         </div>
 
-        {loading && (
-          <p className="text-gray-500 text-center mt-20">Loading dashboard…</p>
-        )}
+        <div className="flex items-center gap-3">
+          <span className="text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-semibold">
+            Administrator
+          </span>
+          <span className="text-sm text-gray-400">{today}</span>
+        </div>
+      </div>
 
-        {!loading && stats && (
-          <>
-            {/* ================= STATS CARDS ================= */}
-            {/* ❗ Responsive grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-              <div className="rounded-2xl p-6 text-white bg-linear-to-r from-blue-400 to-blue-600">
-                <p className="text-sm opacity-90">Total Patients</p>
-                <p className="text-3xl font-bold">{stats.totalPatients}</p>
-              </div>
+      {loading && (
+        <p className="text-gray-500 text-center py-20">Loading dashboard…</p>
+      )}
 
-              <div className="rounded-2xl p-6 text-white bg-linear-to-r from-emerald-400 to-emerald-600">
-                <p className="text-sm opacity-90">Total Doctors</p>
-                <p className="text-3xl font-bold">{stats.totalDoctors}</p>
-              </div>
+      {!loading && stats && (
+        <>
+          {/* STATS */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <StatCard
+              label="Total Patients"
+              value={stats.totalPatients}
+              icon="👤"
+            />
+            <StatCard
+              label="Total Doctors"
+              value={stats.totalDoctors}
+              icon="🩺"
+            />
+            <StatCard
+              label="Appointments Today"
+              value={stats.appointmentsToday}
+              icon="📅"
+            />
+          </div>
 
-              <div className="rounded-2xl p-6 text-white bg-linear-to-r from-purple-400 to-purple-600">
-                <p className="text-sm opacity-90">Appointments Today</p>
-                <p className="text-3xl font-bold">{stats.appointmentsToday}</p>
-              </div>
-            </div>
+          {/* FILTER */}
+          <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+            <label className="text-sm font-medium">Filter by status</label>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="border rounded-md px-3 py-2 text-sm bg-white"
+            >
+              <option value="all">All</option>
+              <option value="pending">Pending</option>
+              <option value="accepted">Accepted</option>
+              <option value="rejected">Rejected</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
 
-            {/* ================= FILTER ================= */}
-            <div className="flex flex-col sm:flex-row gap-3 mb-4">
-              <label className="text-sm font-medium">Filter by status</label>
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="border rounded-md px-3 py-2 text-sm bg-white"
-              >
-                <option value="all">All</option>
-                <option value="pending">Pending</option>
-                <option value="accepted">Accepted</option>
-                <option value="rejected">Rejected</option>
-                <option value="completed">Completed</option>
-              </select>
-            </div>
-
-            {/* ================= TABLE ================= */}
-            {/* ❗ Scroll horizontal sur mobile */}
-            <div className="bg-white rounded-2xl shadow border mb-10 overflow-x-auto">
-              <table className="min-w-225 w-full">
+          {/* TABLE */}
+          <div className="bg-white rounded-2xl shadow border overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-225">
                 <thead className="bg-gray-50 text-xs uppercase text-gray-500">
                   <tr>
                     <th className="px-6 py-4 text-left">Patient</th>
@@ -203,13 +167,15 @@ export default function AdminPage() {
                     <th className="px-6 py-4 text-left">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y">
+                <tbody className="divide-y text-sm">
                   {filteredAppointments.map((a, i) => (
-                    <tr key={i} className="hover:bg-gray-50">
+                    <tr key={i} className="hover:bg-gray-50 transition">
                       <td className="px-6 py-4 font-medium">
                         {a.patient_name || "—"}
                       </td>
-                      <td className="px-6 py-4">{a.patient_email || "—"}</td>
+                      <td className="px-6 py-4 text-gray-600">
+                        {a.patient_email || "—"}
+                      </td>
                       <td className="px-6 py-4">{a.doctor_email}</td>
                       <td className="px-6 py-4">{a.appointment_date}</td>
                       <td className="px-6 py-4">{a.appointment_time}</td>
@@ -220,40 +186,75 @@ export default function AdminPage() {
                       </td>
                     </tr>
                   ))}
+
+                  {filteredAppointments.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan={6}
+                        className="text-center py-10 text-gray-500"
+                      >
+                        No appointments found
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
+          </div>
 
-            {/* ================= CHARTS ================= */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+          {/* CHARTS */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="bg-white rounded-2xl shadow p-4 h-75 sm:h-87.5">
               <AppointmentsChart />
+            </div>
+            <div className="bg-white rounded-2xl shadow p-4 h-75 sm:h-87.5">
               <AppointmentsStatusPie />
             </div>
+          </div>
 
-            {/* ================= DOCTORS ================= */}
-            <div className="bg-white rounded-2xl shadow border p-6">
-              <h3 className="text-sm font-semibold mb-4">Doctors Overview</h3>
-
-              <div className="space-y-4">
-                {doctors.map((doc) => (
-                  <div
-                    key={doc.id}
-                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-                  >
-                    <div>
-                      <p className="text-sm font-medium">{doc.full_name}</p>
-                      <p className="text-xs text-gray-500">{doc.email}</p>
-                    </div>
-                    <span className="text-xs px-3 py-1 rounded-full bg-green-100 text-green-700">
-                      Active
-                    </span>
+          {/* DOCTORS */}
+          <div className="bg-white rounded-2xl shadow border p-6">
+            <h3 className="text-sm font-semibold mb-4">Doctors Overview</h3>
+            <div className="space-y-4">
+              {doctors.map((doc) => (
+                <div key={doc.id} className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium">{doc.full_name}</p>
+                    <p className="text-xs text-gray-500">{doc.email}</p>
                   </div>
-                ))}
-              </div>
+                  <span className="text-xs px-3 py-1 rounded-full bg-green-100 text-green-700">
+                    Active
+                  </span>
+                </div>
+              ))}
             </div>
-          </>
-        )}
-      </main>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+/* ================= COMPONENT ================= */
+
+function StatCard({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value: number;
+  icon: string;
+}) {
+  return (
+    <div className="bg-white rounded-2xl p-6 shadow hover:shadow-lg transition">
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-sm font-medium text-gray-500">{label}</p>
+        <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 text-lg">
+          {icon}
+        </div>
+      </div>
+      <p className="text-3xl font-bold text-gray-900">{value}</p>
     </div>
   );
 }

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
 
 /* ================= TYPES ================= */
 
@@ -10,51 +9,45 @@ type Doctor = {
   id: string;
   full_name: string;
   email: string;
-  specialty: string | null;
 };
 
 type Appointment = {
   id: string;
   appointment_date: string;
   appointment_time: string;
-  status: string;
+  status: string | null;
   patient_name: string | null;
-  patient_email: string | null;
-  patient_phone: string | null;
-  patient_notes: string | null;
-};
-
-type Availability = {
-  id: string;
-  day_of_week: number;
-  start_time: string;
-  end_time: string;
 };
 
 /* ================= PAGE ================= */
 
 export default function DoctorPage() {
-  const router = useRouter();
-
   const [doctor, setDoctor] = useState<Doctor | null>(null);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [availabilities, setAvailabilities] = useState<Availability[]>([]);
-
-  const [dayOfWeek, setDayOfWeek] = useState(1);
-  const [startTime, setStartTime] = useState("09:00");
-  const [endTime, setEndTime] = useState("12:00");
-
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState<string | null>(null);
 
-  /* ================= LOGOUT ================= */
+  const [filter, setFilter] = useState<
+    "today" | "pending" | "completed" | "all"
+  >("today");
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push("/login");
+  const [todayCount, setTodayCount] = useState(0);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [completedCount, setCompletedCount] = useState(0);
+
+  /* ================= HELPERS ================= */
+
+  const today = new Date().toISOString().split("T")[0];
+
+  const recalcStats = (list: Appointment[]) => {
+    setTodayCount(list.filter((a) => a.appointment_date === today).length);
+    setCompletedCount(list.filter((a) => a.status === "completed").length);
+    setPendingCount(
+      list.filter((a) => a.status !== "completed" && a.status !== "rejected")
+        .length
+    );
   };
 
-  /* ================= LOAD DOCTOR + DATA ================= */
+  /* ================= LOAD DATA ================= */
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,48 +60,28 @@ export default function DoctorPage() {
         return;
       }
 
-      /* Doctor */
-      const { data: doctorData, error: doctorError } = await supabase
+      const { data: doctorData } = await supabase
         .from("doctors")
-        .select("id, full_name, email, specialty")
+        .select("id, full_name, email")
         .eq("email", user.email)
         .single();
 
-      if (doctorError || !doctorData) {
+      if (!doctorData) {
         setLoading(false);
         return;
       }
 
       setDoctor(doctorData);
 
-      /* Appointments */
-      const { data: appointmentsData } = await supabase
+      const { data } = await supabase
         .from("appointments")
-        .select(
-          `
-          id,
-          appointment_date,
-          appointment_time,
-          status,
-          patient_name,
-          patient_email,
-          patient_phone,
-          patient_notes
-        `
-        )
+        .select("id, appointment_date, appointment_time, status, patient_name")
         .eq("doctor_email", doctorData.email)
         .order("appointment_date");
 
-      setAppointments(appointmentsData || []);
-
-      /* Availabilities */
-      const { data: availabilityData } = await supabase
-        .from("doctor_availabilities")
-        .select("id, day_of_week, start_time, end_time")
-        .eq("doctor_id", doctorData.id)
-        .order("day_of_week");
-
-      setAvailabilities(availabilityData || []);
+      const list = data || [];
+      setAppointments(list);
+      recalcStats(list);
 
       setLoading(false);
     };
@@ -116,185 +89,193 @@ export default function DoctorPage() {
     fetchData();
   }, []);
 
-  /* ================= UPDATE STATUS ================= */
+  /* ================= COMPLETE ACTION ================= */
 
-  const updateStatus = async (id: string, status: string) => {
-    setMessage(null);
+  const markAsCompleted = async (id: string) => {
+    const ok = window.confirm(
+      "Are you sure you want to mark this appointment as completed?"
+    );
+    if (!ok) return;
 
     const { error } = await supabase
       .from("appointments")
-      .update({ status })
+      .update({ status: "completed" })
       .eq("id", id);
 
     if (error) {
-      setMessage("Failed to update status");
-    } else {
-      setAppointments((prev) =>
-        prev.map((a) => (a.id === id ? { ...a, status } : a))
-      );
-      setMessage("Status updated");
+      alert("Failed to update appointment");
+      return;
     }
-  };
 
-  /* ================= ADD AVAILABILITY ================= */
-
-  const addAvailability = async () => {
-    if (!doctor) return;
-
-    const { data, error } = await supabase
-      .from("doctor_availabilities")
-      .insert({
-        doctor_id: doctor.id,
-        day_of_week: dayOfWeek,
-        start_time: startTime,
-        end_time: endTime,
-      })
-      .select()
-      .single();
-
-    if (!error && data) {
-      setAvailabilities((prev) => [...prev, data]);
-    }
-  };
-
-  /* ================= SAFETY ================= */
-
-  if (!loading && !doctor) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-gray-600">
-        Doctor profile not found.
-      </div>
+    const updated = appointments.map((a) =>
+      a.id === id ? { ...a, status: "completed" } : a
     );
-  }
+
+    setAppointments(updated);
+    recalcStats(updated);
+  };
+
+  /* ================= FILTER ================= */
+
+  const filteredAppointments = appointments.filter((a) => {
+    if (filter === "today") return a.appointment_date === today;
+    if (filter === "pending")
+      return a.status === "pending" || a.status === "paid";
+    if (filter === "completed") return a.status === "completed";
+    return true;
+  });
 
   /* ================= UI ================= */
 
+  if (loading) {
+    return <p className="text-gray-500">Loading dashboard...</p>;
+  }
+
   return (
-    <div className="min-h-screen flex bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white border-r flex flex-col">
-        <div className="p-6 border-b">
-          <p className="font-semibold">{doctor?.full_name}</p>
-          <p className="text-xs text-gray-500">
-            {doctor?.specialty || "Doctor"}
-          </p>
-        </div>
+    <div className="space-y-10">
+      {/* HEADER */}
+      <div>
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <p className="text-sm text-gray-500">
+          Welcome back, {doctor?.full_name}
+        </p>
+      </div>
 
-        <div className="flex-1 px-6 py-4 text-sm text-blue-600 font-semibold">
-          Dashboard
-        </div>
+      {/* STATS */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <StatCard label="Today Appointments" value={todayCount} icon="📅" />
+        <StatCard label="Pending" value={pendingCount} icon="⏳" />
+        <StatCard label="Completed" value={completedCount} icon="✅" />
+      </div>
 
-        <div className="p-6 border-t">
-          <button onClick={handleLogout} className="text-red-600 text-sm">
-            Logout
-          </button>
-        </div>
-      </aside>
+      {/* FILTERS */}
+      <div className="flex gap-2">
+        <FilterButton
+          active={filter === "today"}
+          onClick={() => setFilter("today")}
+        >
+          Today
+        </FilterButton>
+        <FilterButton
+          active={filter === "pending"}
+          onClick={() => setFilter("pending")}
+        >
+          Pending
+        </FilterButton>
+        <FilterButton
+          active={filter === "completed"}
+          onClick={() => setFilter("completed")}
+        >
+          Completed
+        </FilterButton>
+      </div>
 
-      {/* Main */}
-      <main className="flex-1 p-8 space-y-10">
-        <h1 className="text-2xl font-bold">Appointments</h1>
+      {/* TIMELINE */}
+      <div className="bg-white p-6 rounded-2xl shadow space-y-4">
+        <h2 className="text-xl font-semibold">Agenda</h2>
 
-        {/* Appointments */}
-        <div className="bg-white p-6 rounded-xl shadow space-y-4">
-          {appointments.length === 0 && (
-            <p className="text-center text-gray-500">No appointments yet.</p>
-          )}
+        {filteredAppointments.length === 0 && (
+          <p className="text-gray-500 text-sm">No appointments found.</p>
+        )}
 
-          {appointments.map((a) => (
-            <div key={a.id} className="border rounded-xl p-4 space-y-2">
-              <div className="flex justify-between">
-                <p className="font-semibold">
-                  {a.appointment_date} at {a.appointment_time}
+        {filteredAppointments
+          .sort((a, b) => a.appointment_time.localeCompare(b.appointment_time))
+          .map((a) => (
+            <div
+              key={a.id}
+              className="flex items-center gap-6 border rounded-xl px-5 py-4 bg-gray-50"
+            >
+              {/* TIME */}
+              <div className="w-20 text-center font-semibold text-blue-600">
+                {a.appointment_time}
+              </div>
+
+              {/* DETAILS */}
+              <div className="flex-1">
+                <p className="font-medium">
+                  {a.patient_name || "Unknown patient"}
                 </p>
-                <span className="text-xs">{a.status}</span>
+                <p className="text-xs text-gray-500">{a.appointment_date}</p>
               </div>
 
-              <div className="text-sm text-gray-600">
-                <p>Patient: {a.patient_name || "—"}</p>
-                <p>Email: {a.patient_email || "—"}</p>
-                <p>Phone: {a.patient_phone || "—"}</p>
-                {a.patient_notes && <p>Notes: {a.patient_notes}</p>}
-              </div>
+              {/* STATUS + ACTION */}
+              <div className="flex items-center gap-3">
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-medium
+                    ${
+                      a.status === "completed"
+                        ? "bg-green-100 text-green-700"
+                        : a.status === "accepted"
+                        ? "bg-blue-100 text-blue-700"
+                        : a.status === "paid"
+                        ? "bg-purple-100 text-purple-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    }
+                  `}
+                >
+                  {a.status ?? "pending"}
+                </span>
 
-              <div className="flex gap-2 pt-2">
-                <button
-                  onClick={() => updateStatus(a.id, "accepted")}
-                  className="bg-green-600 text-white px-3 py-1 rounded text-sm"
-                >
-                  Accept
-                </button>
-                <button
-                  onClick={() => updateStatus(a.id, "rejected")}
-                  className="bg-red-600 text-white px-3 py-1 rounded text-sm"
-                >
-                  Reject
-                </button>
-                <button
-                  onClick={() => updateStatus(a.id, "completed")}
-                  className="bg-gray-600 text-white px-3 py-1 rounded text-sm"
-                >
-                  Complete
-                </button>
+                {a.status !== "completed" && (
+                  <button
+                    onClick={() => markAsCompleted(a.id)}
+                    className="px-3 py-1 text-xs rounded-full bg-green-600 text-white hover:bg-green-700 transition"
+                  >
+                    Complete
+                  </button>
+                )}
               </div>
             </div>
           ))}
-
-          {message && (
-            <p className="text-center text-sm text-gray-600">{message}</p>
-          )}
-        </div>
-
-        {/* Availabilities */}
-        <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="text-xl font-bold mb-4">My Availability</h2>
-
-          <div className="grid grid-cols-4 gap-2 mb-4 text-sm">
-            <select
-              value={dayOfWeek}
-              onChange={(e) => setDayOfWeek(Number(e.target.value))}
-              className="border rounded px-2 py-1"
-            >
-              <option value={0}>Sunday</option>
-              <option value={1}>Monday</option>
-              <option value={2}>Tuesday</option>
-              <option value={3}>Wednesday</option>
-              <option value={4}>Thursday</option>
-              <option value={5}>Friday</option>
-              <option value={6}>Saturday</option>
-            </select>
-
-            <input
-              type="time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-              className="border rounded px-2 py-1"
-            />
-
-            <input
-              type="time"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-              className="border rounded px-2 py-1"
-            />
-
-            <button
-              onClick={addAvailability}
-              className="bg-blue-600 text-white rounded px-3 py-1"
-            >
-              Add
-            </button>
-          </div>
-
-          <ul className="text-sm text-gray-700 space-y-1">
-            {availabilities.map((a) => (
-              <li key={a.id}>
-                Day {a.day_of_week} — {a.start_time} → {a.end_time}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </main>
+      </div>
     </div>
+  );
+}
+
+/* ================= COMPONENTS ================= */
+
+function StatCard({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value: number;
+  icon: string;
+}) {
+  return (
+    <div className="bg-white p-6 rounded-xl shadow flex items-center gap-4">
+      <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xl">
+        {icon}
+      </div>
+      <div>
+        <p className="text-sm text-gray-500">{label}</p>
+        <p className="text-3xl font-bold">{value}</p>
+      </div>
+    </div>
+  );
+}
+
+function FilterButton({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-4 py-2 rounded-full text-sm font-medium border transition
+        ${
+          active
+            ? "bg-blue-600 text-white border-blue-600"
+            : "bg-white text-gray-600 hover:bg-gray-100"
+        }`}
+    >
+      {children}
+    </button>
   );
 }
