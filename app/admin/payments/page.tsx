@@ -24,13 +24,13 @@ const statusBadge = (status: string) => {
 
   switch (status) {
     case "paid":
-      return `${base} bg-green-100 text-green-700`;
+      return `${base} bg-green-200 text-green-900 md:bg-green-100 md:text-green-700`;
     case "pending":
-      return `${base} bg-yellow-100 text-yellow-700`;
+      return `${base} bg-yellow-200 text-yellow-900 md:bg-yellow-100 md:text-yellow-700`;
     case "failed":
-      return `${base} bg-red-100 text-red-700`;
+      return `${base} bg-red-200 text-red-900 md:bg-red-100 md:text-red-700`;
     default:
-      return `${base} bg-gray-100 text-gray-600`;
+      return `${base} bg-gray-300 text-gray-900 md:bg-gray-100 md:text-gray-600`;
   }
 };
 
@@ -76,24 +76,28 @@ export default function AdminPaymentsPage() {
       {/* HEADER */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold">Payments — Admin</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-gray-900">Payments — Admin</h1>
+          <p className="text-sm text-gray-700 md:text-gray-500">
             All payments processed through the platform
           </p>
         </div>
 
-        <span className="px-4 py-2 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold">
+        <span className="px-4 py-2 rounded-full bg-blue-200 text-blue-900 md:bg-blue-100 md:text-blue-700 text-sm font-semibold">
           Total: {payments.length}
         </span>
       </div>
 
       {/* CONTENT */}
       {loading && (
-        <p className="text-center text-gray-500 py-20">Loading payments...</p>
+        <p className="text-center text-gray-700 md:text-gray-500 py-20">
+          Loading payments...
+        </p>
       )}
 
       {!loading && payments.length === 0 && (
-        <p className="text-center text-gray-500 py-20">No payments found.</p>
+        <p className="text-center text-gray-700 md:text-gray-500 py-20">
+          No payments found.
+        </p>
       )}
 
       {/* PAYMENTS LIST */}
@@ -106,10 +110,10 @@ export default function AdminPaymentsPage() {
             {/* TOP */}
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-xl font-bold">
+                <p className="text-xl font-bold text-gray-900">
                   {formatAmount(payment.amount_cents, payment.currency)}
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-700 md:text-gray-500">
                   {new Date(payment.created_at).toLocaleString()}
                 </p>
               </div>
@@ -120,21 +124,21 @@ export default function AdminPaymentsPage() {
             </div>
 
             {/* DETAILS */}
-            <div className="border-t pt-4 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-600">
+            <div className="border-t pt-4 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-800 md:text-gray-600">
               <p>
-                <span className="font-medium text-gray-800">User ID:</span>{" "}
+                <span className="font-medium text-gray-900">User ID:</span>{" "}
                 {payment.user_id || "—"}
               </p>
 
               <p>
-                <span className="font-medium text-gray-800">
+                <span className="font-medium text-gray-900">
                   Appointment ID:
                 </span>{" "}
                 {payment.appointment_id || "—"}
               </p>
 
               <p className="md:col-span-2 truncate">
-                <span className="font-medium text-gray-800">
+                <span className="font-medium text-gray-900">
                   Stripe Session:
                 </span>{" "}
                 {payment.stripe_session_id}
@@ -145,14 +149,14 @@ export default function AdminPaymentsPage() {
             <div className="flex gap-3 pt-2">
               <button
                 disabled
-                className="text-sm px-4 py-2 rounded-md border text-gray-400 cursor-not-allowed"
+                className="text-sm px-4 py-2 rounded-md border text-gray-500 md:text-gray-400 cursor-not-allowed"
               >
                 View appointment
               </button>
 
               <button
                 disabled
-                className="text-sm px-4 py-2 rounded-md border text-gray-400 cursor-not-allowed"
+                className="text-sm px-4 py-2 rounded-md border text-gray-500 md:text-gray-400 cursor-not-allowed"
               >
                 View receipt
               </button>

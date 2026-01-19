@@ -21,7 +21,7 @@ function AdminNav({ router, pathname, onNavigate }: AdminNavProps) {
       ${
         isActive
           ? "bg-blue-100 text-blue-700 font-semibold"
-          : "text-gray-600 hover:bg-gray-100"
+          : "text-gray-700 hover:bg-gray-100"
       }
     `;
   };
@@ -80,8 +80,11 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-gray-100 overflow-x-hidden">
       {/* ================= TOP BAR (MOBILE) ================= */}
       <div className="lg:hidden flex items-center justify-between bg-white border-b px-4 py-3">
-        <h2 className="font-bold">Clinic Admin</h2>
-        <button onClick={() => setOpen(true)} className="text-2xl">
+        <h2 className="font-bold text-gray-900">Clinic Admin</h2>
+        <button
+          onClick={() => setOpen(true)}
+          className="text-2xl text-gray-700"
+        >
           ☰
         </button>
       </div>
@@ -98,8 +101,11 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           >
             {/* HEADER */}
             <div className="flex items-center justify-between mb-6">
-              <h2 className="font-bold">Clinic Admin</h2>
-              <button onClick={() => setOpen(false)} className="text-xl">
+              <h2 className="font-bold text-gray-900">Clinic Admin</h2>
+              <button
+                onClick={() => setOpen(false)}
+                className="text-xl text-gray-700"
+              >
                 ✕
               </button>
             </div>
@@ -124,7 +130,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         {/* ================= SIDEBAR DESKTOP ================= */}
         <aside className="hidden lg:flex w-64 bg-white border-r flex-col">
           <div className="p-6 border-b">
-            <h2 className="text-xl font-bold">Clinic Admin</h2>
+            <h2 className="text-xl font-bold text-gray-900">Clinic Admin</h2>
             <p className="text-xs text-gray-500">Dashboard</p>
           </div>
 
@@ -133,7 +139,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               A
             </div>
             <div>
-              <p className="text-sm font-semibold">Administrator</p>
+              <p className="text-sm font-semibold text-gray-900">
+                Administrator
+              </p>
               <p className="text-xs text-gray-500">admin</p>
             </div>
           </div>

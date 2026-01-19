@@ -128,15 +128,15 @@ export default function DoctorPage() {
   /* ================= UI ================= */
 
   if (loading) {
-    return <p className="text-gray-500">Loading dashboard...</p>;
+    return <p className="text-gray-700">Loading dashboard...</p>;
   }
 
   return (
     <div className="space-y-10">
       {/* HEADER */}
       <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-sm text-gray-500">
+        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <p className="text-sm text-gray-700">
           Welcome back, {doctor?.full_name}
         </p>
       </div>
@@ -149,7 +149,7 @@ export default function DoctorPage() {
       </div>
 
       {/* FILTERS */}
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <FilterButton
           active={filter === "today"}
           onClick={() => setFilter("today")}
@@ -172,10 +172,10 @@ export default function DoctorPage() {
 
       {/* TIMELINE */}
       <div className="bg-white p-6 rounded-2xl shadow space-y-4">
-        <h2 className="text-xl font-semibold">Agenda</h2>
+        <h2 className="text-xl font-semibold text-gray-900">Agenda</h2>
 
         {filteredAppointments.length === 0 && (
-          <p className="text-gray-500 text-sm">No appointments found.</p>
+          <p className="text-gray-700 text-sm">No appointments found.</p>
         )}
 
         {filteredAppointments
@@ -183,19 +183,19 @@ export default function DoctorPage() {
           .map((a) => (
             <div
               key={a.id}
-              className="flex items-center gap-6 border rounded-xl px-5 py-4 bg-gray-50"
+              className="flex flex-col sm:flex-row sm:items-center gap-6 border rounded-xl px-5 py-4 bg-white"
             >
               {/* TIME */}
-              <div className="w-20 text-center font-semibold text-blue-600">
+              <div className="w-20 text-center font-semibold text-blue-700">
                 {a.appointment_time}
               </div>
 
               {/* DETAILS */}
               <div className="flex-1">
-                <p className="font-medium">
+                <p className="font-medium text-gray-900">
                   {a.patient_name || "Unknown patient"}
                 </p>
-                <p className="text-xs text-gray-500">{a.appointment_date}</p>
+                <p className="text-xs text-gray-700">{a.appointment_date}</p>
               </div>
 
               {/* STATUS + ACTION */}
@@ -204,12 +204,12 @@ export default function DoctorPage() {
                   className={`px-3 py-1 rounded-full text-xs font-medium
                     ${
                       a.status === "completed"
-                        ? "bg-green-100 text-green-700"
+                        ? "bg-green-100 text-green-800"
                         : a.status === "accepted"
-                        ? "bg-blue-100 text-blue-700"
+                        ? "bg-blue-100 text-blue-800"
                         : a.status === "paid"
-                        ? "bg-purple-100 text-purple-700"
-                        : "bg-yellow-100 text-yellow-700"
+                        ? "bg-purple-100 text-purple-800"
+                        : "bg-yellow-100 text-yellow-800"
                     }
                   `}
                 >
@@ -245,12 +245,12 @@ function StatCard({
 }) {
   return (
     <div className="bg-white p-6 rounded-xl shadow flex items-center gap-4">
-      <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xl">
+      <div className="w-12 h-12 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xl">
         {icon}
       </div>
       <div>
-        <p className="text-sm text-gray-500">{label}</p>
-        <p className="text-3xl font-bold">{value}</p>
+        <p className="text-sm text-gray-700">{label}</p>
+        <p className="text-3xl font-bold text-gray-900">{value}</p>
       </div>
     </div>
   );
@@ -272,7 +272,7 @@ function FilterButton({
         ${
           active
             ? "bg-blue-600 text-white border-blue-600"
-            : "bg-white text-gray-600 hover:bg-gray-100"
+            : "bg-white text-gray-800 hover:bg-gray-100"
         }`}
     >
       {children}

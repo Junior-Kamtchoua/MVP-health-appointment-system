@@ -44,31 +44,35 @@ export default function DoctorAppointmentsPage() {
   }, []);
 
   if (loading) {
-    return <p className="text-gray-500">Loading appointments...</p>;
+    return (
+      <p className="text-gray-700 sm:text-gray-500">Loading appointments...</p>
+    );
   }
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Appointments</h1>
-        <p className="text-sm text-gray-500">All your scheduled appointments</p>
+        <h1 className="text-3xl font-bold text-gray-900">Appointments</h1>
+        <p className="text-sm text-gray-700 sm:text-gray-500">
+          All your scheduled appointments
+        </p>
       </div>
 
       {appointments.length === 0 && (
-        <p className="text-gray-500">No appointments found.</p>
+        <p className="text-gray-700 sm:text-gray-500">No appointments found.</p>
       )}
 
       <div className="bg-white rounded-xl shadow divide-y">
         {appointments.map((a) => (
           <div
             key={a.id}
-            className="flex justify-between items-center p-4 hover:bg-gray-50 transition cursor-pointer"
+            className="flex justify-between items-center p-4 transition cursor-pointer hover:bg-gray-50"
           >
             <div>
-              <p className="font-semibold">
+              <p className="font-semibold text-gray-900">
                 {a.patient_name || "Unknown patient"}
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-700 sm:text-gray-500">
                 {a.appointment_date} at {a.appointment_time}
               </p>
             </div>
@@ -76,12 +80,12 @@ export default function DoctorAppointmentsPage() {
             <span
               className={`px-3 py-1 rounded-full text-xs font-semibold ${
                 a.status === "completed"
-                  ? "bg-gray-200 text-gray-700"
+                  ? "bg-gray-200 text-gray-800"
                   : a.status === "accepted"
-                  ? "bg-green-100 text-green-700"
+                  ? "bg-green-100 text-green-800"
                   : a.status === "rejected"
-                  ? "bg-red-100 text-red-700"
-                  : "bg-yellow-100 text-yellow-700"
+                  ? "bg-red-100 text-red-800"
+                  : "bg-yellow-100 text-yellow-800"
               }`}
             >
               {a.status}

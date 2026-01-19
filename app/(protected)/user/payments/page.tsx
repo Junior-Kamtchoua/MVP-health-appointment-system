@@ -36,30 +36,35 @@ export default function UserPaymentsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-2xl font-bold mb-6">My Payments</h1>
+    <div className="min-h-screen bg-gray-100 px-4 sm:px-8 py-6">
+      <h1 className="text-2xl font-bold mb-6 text-gray-900">My Payments</h1>
 
-      {loading && <p>Loading...</p>}
+      {loading && <p className="text-gray-700 font-medium">Loading...</p>}
 
       {!loading && payments.length === 0 && (
-        <p className="text-gray-500">No payments found.</p>
+        <p className="text-gray-700">No payments found.</p>
       )}
 
       <div className="space-y-4">
         {payments.map((payment) => (
-          <div key={payment.id} className="bg-white p-4 rounded-xl shadow">
-            <p className="font-semibold">
+          <div
+            key={payment.id}
+            className="bg-white p-4 rounded-xl shadow border border-gray-200"
+          >
+            <p className="font-semibold text-gray-900 text-lg">
               ${(payment.amount_cents / 100).toFixed(2)}{" "}
               {payment.currency.toUpperCase()}
             </p>
 
-            <p className="text-sm text-gray-600">Status: {payment.status}</p>
+            <p className="text-sm text-gray-700 font-medium">
+              Status: <span className="capitalize">{payment.status}</span>
+            </p>
 
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-600 mt-1">
               Date: {new Date(payment.created_at).toLocaleString()}
             </p>
 
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-gray-600 break-all">
               Appointment ID: {payment.appointment_id}
             </p>
           </div>

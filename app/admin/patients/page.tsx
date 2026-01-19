@@ -69,12 +69,12 @@ export default function AdminPatientsPage() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-gray-900">
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Patients</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-gray-900">Patients</h1>
+          <p className="text-sm text-gray-600">
             Patients extracted from appointments
           </p>
         </div>
@@ -91,7 +91,7 @@ export default function AdminPatientsPage() {
           placeholder="Search patient by name or email"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border rounded-md px-3 py-2 text-sm w-full sm:w-1/2"
+          className="border rounded-md px-3 py-2 text-sm w-full sm:w-1/2 text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-300"
         />
       </div>
 
@@ -100,8 +100,8 @@ export default function AdminPatientsPage() {
         {loading ? (
           <p className="text-center text-gray-500 py-20">Loading patients...</p>
         ) : (
-          <table className="w-full min-w-200">
-            <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+          <table className="w-full min-w-[900px]">
+            <thead className="bg-gray-50 text-xs uppercase text-gray-600">
               <tr>
                 <th className="px-6 py-4 text-left">Patient</th>
                 <th className="px-6 py-4 text-left">Email</th>
@@ -114,13 +114,17 @@ export default function AdminPatientsPage() {
             <tbody className="divide-y text-sm">
               {filteredPatients.map((p) => (
                 <tr key={p.email} className="hover:bg-gray-50 transition">
-                  <td className="px-6 py-4 font-medium">{p.name || "—"}</td>
+                  <td className="px-6 py-4 font-medium text-gray-900">
+                    {p.name || "—"}
+                  </td>
 
                   <td className="px-6 py-4 text-gray-700">{p.email}</td>
 
-                  <td className="px-6 py-4">{p.appointments_count}</td>
+                  <td className="px-6 py-4 text-gray-900">
+                    {p.appointments_count}
+                  </td>
 
-                  <td className="px-6 py-4 text-gray-500">
+                  <td className="px-6 py-4 text-gray-600">
                     {new Date(p.first_appointment).toLocaleDateString()}
                   </td>
 

@@ -57,15 +57,15 @@ export default function DoctorLayout({
     `block px-4 py-2 rounded transition ${
       pathname === path
         ? "bg-blue-100 text-blue-700 font-semibold"
-        : "text-gray-600 hover:bg-gray-100"
+        : "text-gray-700 hover:bg-gray-100"
     }`;
 
   if (loading) {
-    return <div className="p-8 text-gray-500">Loading...</div>;
+    return <div className="p-8 text-gray-800 font-medium">Loading...</div>;
   }
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
+    <div className="min-h-screen flex bg-gray-100 text-gray-900">
       {/* SIDEBAR */}
       <aside className="w-64 bg-white border-r flex flex-col">
         {/* Doctor info */}
@@ -73,8 +73,10 @@ export default function DoctorLayout({
           <div className="w-14 h-14 rounded-full bg-blue-600 text-white flex items-center justify-center text-xl font-bold">
             {doctor?.full_name?.charAt(0)}
           </div>
-          <p className="mt-3 font-semibold">{doctor?.full_name}</p>
-          <p className="text-xs text-gray-500">Doctor</p>
+          <p className="mt-3 font-semibold text-gray-900">
+            {doctor?.full_name}
+          </p>
+          <p className="text-xs text-gray-600">Doctor</p>
         </div>
 
         {/* Navigation */}
@@ -105,7 +107,7 @@ export default function DoctorLayout({
               await supabase.auth.signOut();
               router.push("/login");
             }}
-            className="text-red-600 text-sm hover:underline"
+            className="text-red-600 text-sm hover:underline font-medium"
           >
             Logout
           </button>
@@ -113,7 +115,7 @@ export default function DoctorLayout({
       </aside>
 
       {/* CONTENT */}
-      <main className="flex-1 p-8">{children}</main>
+      <main className="flex-1 p-8 text-gray-900">{children}</main>
     </div>
   );
 }

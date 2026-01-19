@@ -33,33 +33,36 @@ export default function UserAppointmentsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-2xl font-bold mb-6">My Appointments</h1>
+    <div className="min-h-screen bg-gray-50 p-8">
+      <h1 className="text-2xl font-bold mb-6 text-gray-900">My Appointments</h1>
 
-      {loading && <p>Loading...</p>}
+      {loading && <p className="text-gray-700">Loading...</p>}
 
       {!loading && appointments.length === 0 && (
-        <p className="text-gray-500">You have no appointments yet.</p>
+        <p className="text-gray-700">You have no appointments yet.</p>
       )}
 
       <ul className="space-y-4">
         {appointments.map((appt) => (
-          <li key={appt.id} className="bg-white p-4 rounded-xl shadow">
-            <p className="font-semibold">
+          <li
+            key={appt.id}
+            className="bg-white p-4 rounded-xl shadow border border-gray-200"
+          >
+            <p className="font-semibold text-gray-900">
               {appt.appointment_date} at {appt.appointment_time}
             </p>
 
-            <p className="text-sm text-gray-600">Doctor: {appt.doctor_email}</p>
+            <p className="text-sm text-gray-700">Doctor: {appt.doctor_email}</p>
 
             <span
-              className={`inline-block mt-2 px-3 py-1 text-xs rounded-full ${
+              className={`inline-block mt-2 px-3 py-1 text-xs rounded-full font-semibold ${
                 appt.status === "accepted"
-                  ? "bg-green-100 text-green-700"
+                  ? "bg-green-100 text-green-800"
                   : appt.status === "rejected"
-                  ? "bg-red-100 text-red-700"
+                  ? "bg-red-100 text-red-800"
                   : appt.status === "completed"
-                  ? "bg-gray-200 text-gray-700"
-                  : "bg-yellow-100 text-yellow-700"
+                  ? "bg-gray-300 text-gray-800"
+                  : "bg-yellow-100 text-yellow-800"
               }`}
             >
               {appt.status}

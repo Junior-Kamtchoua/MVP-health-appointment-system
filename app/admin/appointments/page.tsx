@@ -77,12 +77,12 @@ export default function AdminAppointmentsPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-gray-900">
       {/* ================= HEADER ================= */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold">Appointments</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-gray-900">Appointments</h1>
+          <p className="text-sm text-gray-600">
             Manage and monitor all clinic appointments
           </p>
         </div>
@@ -99,13 +99,13 @@ export default function AdminAppointmentsPage() {
           placeholder="Search patient or doctor"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border rounded-md px-3 py-2 text-sm w-full sm:w-1/2"
+          className="border rounded-md px-3 py-2 text-sm w-full sm:w-1/2 text-gray-900 placeholder-gray-400"
         />
 
         <select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
-          className="border rounded-md px-3 py-2 text-sm w-full sm:w-1/4"
+          className="border rounded-md px-3 py-2 text-sm w-full sm:w-1/4 text-gray-900"
         >
           <option value="all">All statuses</option>
           <option value="pending">Pending</option>
@@ -118,12 +118,12 @@ export default function AdminAppointmentsPage() {
       {/* ================= TABLE ================= */}
       <div className="bg-white rounded-2xl shadow overflow-x-auto">
         {loading ? (
-          <p className="text-center text-gray-500 py-20">
+          <p className="text-center text-gray-600 py-20">
             Loading appointments...
           </p>
         ) : (
-          <table className="w-full min-w-225">
-            <thead className="bg-gray-50 text-xs uppercase text-gray-500">
+          <table className="w-full min-w-[900px]">
+            <thead className="bg-gray-50 text-xs uppercase text-gray-600">
               <tr>
                 <th className="px-6 py-4 text-left">Patient</th>
                 <th className="px-6 py-4 text-left">Doctor</th>
@@ -137,16 +137,23 @@ export default function AdminAppointmentsPage() {
               {filtered.map((a) => (
                 <tr key={a.id} className="hover:bg-gray-50 transition">
                   <td className="px-6 py-4">
-                    <p className="font-medium">{a.patient_name || "—"}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="font-medium text-gray-900">
+                      {a.patient_name || "—"}
+                    </p>
+                    <p className="text-xs text-gray-600">
                       {a.patient_email || ""}
                     </p>
                   </td>
 
-                  <td className="px-6 py-4 text-gray-700">{a.doctor_email}</td>
+                  <td className="px-6 py-4 text-gray-800">{a.doctor_email}</td>
 
-                  <td className="px-6 py-4">{a.appointment_date}</td>
-                  <td className="px-6 py-4">{a.appointment_time}</td>
+                  <td className="px-6 py-4 text-gray-800">
+                    {a.appointment_date}
+                  </td>
+
+                  <td className="px-6 py-4 text-gray-800">
+                    {a.appointment_time}
+                  </td>
 
                   <td className="px-6 py-4">
                     <span className={statusBadge(a.status)}>{a.status}</span>
@@ -156,7 +163,7 @@ export default function AdminAppointmentsPage() {
 
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="text-center py-10 text-gray-500">
+                  <td colSpan={5} className="text-center py-10 text-gray-600">
                     No appointments found
                   </td>
                 </tr>

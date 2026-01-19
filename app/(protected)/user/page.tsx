@@ -275,9 +275,11 @@ export default function UserPage() {
   /* ================= UI ================= */
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-gray-100 px-4 py-6 sm:p-8">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-3xl font-bold">Book an Appointment</h1>
+        <h1 className="text-3xl font-bold text-gray-900">
+          Book an Appointment
+        </h1>
         <button
           onClick={handleLogout}
           className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition"
@@ -302,15 +304,14 @@ export default function UserPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Doctors */}
         <div className="bg-white p-6 rounded-xl shadow ring-2 ring-blue-100">
-          <h2 className="font-semibold mb-4">Select a Doctor</h2>
+          <h2 className="font-semibold mb-4 text-gray-800">Select a Doctor</h2>
 
-          {/* Search */}
           <input
             type="text"
             placeholder="Search doctor..."
             value={doctorSearch}
             onChange={(e) => setDoctorSearch(e.target.value)}
-            className="w-full mb-4 border rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-blue-300"
+            className="w-full mb-4 border rounded-lg px-4 py-2 text-sm text-gray-800"
           />
 
           <div className="space-y-3">
@@ -332,8 +333,10 @@ export default function UserPage() {
                   </div>
 
                   <div className="flex-1">
-                    <p className="font-semibold text-sm">{doc.full_name}</p>
-                    <p className="text-xs text-gray-500">{doc.specialty}</p>
+                    <p className="font-semibold text-sm text-gray-800">
+                      {doc.full_name}
+                    </p>
+                    <p className="text-xs text-gray-600">{doc.specialty}</p>
                   </div>
 
                   {isSelected && (
@@ -350,13 +353,13 @@ export default function UserPage() {
           className={`bg-white p-6 rounded-xl shadow transition ${
             selectedDoctor
               ? "ring-2 ring-blue-100"
-              : "opacity-50 pointer-events-none"
+              : "pointer-events-none grayscale text-gray-500"
           }`}
         >
-          <h2 className="font-semibold mb-1 flex items-center gap-2">
+          <h2 className="font-semibold mb-1 flex items-center gap-2 text-gray-800">
             📅 Choose Date
           </h2>
-          <p className="text-xs text-gray-500 mb-4">
+          <p className="text-xs text-gray-600 mb-4">
             Select an available date for your appointment
           </p>
 
@@ -387,10 +390,10 @@ export default function UserPage() {
           {/* Time */}
           {selectedDate && (
             <>
-              <h2 className="font-semibold mt-8 mb-1 flex items-center gap-2">
+              <h2 className="font-semibold mt-8 mb-1 flex items-center gap-2 text-gray-800">
                 ⏰ Select Time
               </h2>
-              <p className="text-xs text-gray-500 mb-4">
+              <p className="text-xs text-gray-600 mb-4">
                 Gray slots are already booked
               </p>
 
@@ -403,7 +406,7 @@ export default function UserPage() {
                     className={`min-w-20 px-4 py-2 rounded-lg text-sm font-semibold border transition
               ${
                 isBooked
-                  ? "bg-gray-200 text-gray-400 line-through cursor-not-allowed"
+                  ? "bg-gray-200 text-gray-500 line-through cursor-not-allowed"
                   : selectedTime === time
                   ? "bg-blue-600 text-white border-blue-600"
                   : "bg-white hover:bg-blue-50 border-gray-300"
@@ -419,11 +422,13 @@ export default function UserPage() {
 
         {/* Patient */}
         <div className="bg-white p-6 rounded-xl shadow">
-          <h2 className="font-semibold mb-4">Patient Information</h2>
+          <h2 className="font-semibold mb-4 text-gray-800">
+            Patient Information
+          </h2>
 
           <input
             placeholder="Full Name"
-            className="w-full border rounded-lg px-3 py-2 text-sm mb-3"
+            className="w-full border rounded-lg px-3 py-2 text-sm mb-3 text-gray-800"
             value={patient.fullName}
             onChange={(e) =>
               setPatient({ ...patient, fullName: e.target.value })
@@ -431,20 +436,20 @@ export default function UserPage() {
           />
           <input
             placeholder="Email"
-            className="w-full border rounded-lg px-3 py-2 text-sm mb-3"
+            className="w-full border rounded-lg px-3 py-2 text-sm mb-3 text-gray-800"
             value={patient.email}
             onChange={(e) => setPatient({ ...patient, email: e.target.value })}
           />
           <input
             placeholder="Phone"
-            className="w-full border rounded-lg px-3 py-2 text-sm mb-3"
+            className="w-full border rounded-lg px-3 py-2 text-sm mb-3 text-gray-800"
             value={patient.phone}
             onChange={(e) => setPatient({ ...patient, phone: e.target.value })}
           />
           <textarea
             placeholder="Notes"
             rows={3}
-            className="w-full border rounded-lg px-3 py-2 text-sm mb-4"
+            className="w-full border rounded-lg px-3 py-2 text-sm mb-4 text-gray-800"
             value={patient.notes}
             onChange={(e) => setPatient({ ...patient, notes: e.target.value })}
           />
@@ -462,7 +467,6 @@ export default function UserPage() {
       {/* 🔹 Trust / Features section */}
       <div className="mt-10 bg-white rounded-xl shadow-sm border px-6 py-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-          {/* Secure */}
           <div className="flex items-center justify-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
               🔒
@@ -472,7 +476,6 @@ export default function UserPage() {
             </span>
           </div>
 
-          {/* Quick */}
           <div className="flex items-center justify-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
               ⚡
@@ -480,7 +483,6 @@ export default function UserPage() {
             <span className="font-medium text-gray-700">Quick & Easy</span>
           </div>
 
-          {/* Reschedule */}
           <div className="flex items-center justify-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
               📅

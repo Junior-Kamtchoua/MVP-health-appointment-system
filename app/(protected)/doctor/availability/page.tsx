@@ -33,7 +33,7 @@ const dayLabel = (day: number) => {
   return days[day];
 };
 
-const weekDays = [1, 2, 3, 4, 5, 6, 0]; // Monday → Sunday
+const weekDays = [1, 2, 3, 4, 5, 6, 0];
 
 const isMorning = (time: string) => {
   const hour = parseInt(time.split(":")[0], 10);
@@ -128,22 +128,22 @@ export default function DoctorAvailabilityPage() {
   /* ================= UI ================= */
 
   if (loading) {
-    return <p className="text-gray-500">Loading availability...</p>;
+    return <p className="text-gray-700 font-medium">Loading availability...</p>;
   }
 
   return (
     <div className="space-y-10">
       {/* HEADER */}
       <div>
-        <h1 className="text-3xl font-bold">My Availability</h1>
-        <p className="text-sm text-gray-500">
+        <h1 className="text-3xl font-bold text-gray-900">My Availability</h1>
+        <p className="text-sm text-gray-600">
           Set your consultation hours for patients
         </p>
       </div>
 
       {/* ADD FORM */}
       <div className="bg-white p-6 rounded-2xl shadow border">
-        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900">
           ➕ Add Availability
         </h2>
 
@@ -151,7 +151,7 @@ export default function DoctorAvailabilityPage() {
           <select
             value={dayOfWeek}
             onChange={(e) => setDayOfWeek(Number(e.target.value))}
-            className="border rounded-lg px-3 py-2 hover:border-blue-500"
+            className="border rounded-lg px-3 py-2 hover:border-blue-500 text-gray-900"
           >
             <option value={1}>Monday</option>
             <option value={2}>Tuesday</option>
@@ -166,19 +166,19 @@ export default function DoctorAvailabilityPage() {
             type="time"
             value={startTime}
             onChange={(e) => setStartTime(e.target.value)}
-            className="border rounded-lg px-3 py-2 hover:border-blue-500"
+            className="border rounded-lg px-3 py-2 hover:border-blue-500 text-gray-900"
           />
 
           <input
             type="time"
             value={endTime}
             onChange={(e) => setEndTime(e.target.value)}
-            className="border rounded-lg px-3 py-2 hover:border-blue-500"
+            className="border rounded-lg px-3 py-2 hover:border-blue-500 text-gray-900"
           />
 
           <button
             onClick={addAvailability}
-            className="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700"
+            className="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 font-semibold"
           >
             Add
           </button>
@@ -187,25 +187,27 @@ export default function DoctorAvailabilityPage() {
 
       {/* EXISTING LIST */}
       <div className="bg-white p-6 rounded-2xl shadow border">
-        <h2 className="text-lg font-semibold mb-4">Existing Availability</h2>
+        <h2 className="text-lg font-semibold mb-4 text-gray-900">
+          Existing Availability
+        </h2>
 
         {availabilities.length === 0 && (
-          <p className="text-sm text-gray-500">No availability defined yet.</p>
+          <p className="text-sm text-gray-600">No availability defined yet.</p>
         )}
 
         <ul className="space-y-3 text-sm">
           {availabilities.map((a) => (
             <li
               key={a.id}
-              className="flex justify-between items-center bg-gray-50 border rounded-xl px-4 py-3 hover:bg-gray-100"
+              className="flex justify-between items-center bg-gray-100 border rounded-xl px-4 py-3 hover:bg-gray-200"
             >
-              <span className="font-medium">
+              <span className="font-medium text-gray-900">
                 {dayLabel(a.day_of_week)} — {a.start_time} → {a.end_time}
               </span>
 
               <button
                 onClick={() => deleteAvailability(a.id)}
-                className="text-red-500 text-xs font-semibold hover:underline"
+                className="text-red-600 text-xs font-semibold hover:underline"
               >
                 Remove
               </button>
@@ -216,7 +218,7 @@ export default function DoctorAvailabilityPage() {
 
       {/* WEEKLY CALENDAR */}
       <div className="bg-white p-6 rounded-2xl shadow border">
-        <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
+        <h2 className="text-lg font-semibold mb-6 flex items-center gap-2 text-gray-900">
           📅 Weekly Availability
         </h2>
 
@@ -235,26 +237,26 @@ export default function DoctorAvailabilityPage() {
             );
 
             return (
-              <div key={day} className="bg-gray-50 rounded-xl p-4 space-y-4">
-                <p className="text-sm font-semibold text-center">
+              <div key={day} className="bg-gray-100 rounded-xl p-4 space-y-4">
+                <p className="text-sm font-semibold text-center text-gray-900">
                   {dayLabel(day)}
                 </p>
 
                 {/* MORNING */}
                 <div>
-                  <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
+                  <p className="text-xs text-gray-700 mb-1 flex items-center gap-1">
                     ☀️ Morning
                   </p>
 
                   {morningSlots.length === 0 && (
-                    <p className="text-xs text-gray-400">No slots</p>
+                    <p className="text-xs text-gray-600">No slots</p>
                   )}
 
                   <div className="space-y-1">
                     {morningSlots.map((slot) => (
                       <div
                         key={slot.id}
-                        className="bg-blue-600/10 text-blue-700 text-xs font-medium rounded-lg px-2 py-1 text-center"
+                        className="bg-blue-100 text-blue-800 text-xs font-medium rounded-lg px-2 py-1 text-center"
                       >
                         {slot.start_time} → {slot.end_time}
                       </div>
@@ -264,19 +266,19 @@ export default function DoctorAvailabilityPage() {
 
                 {/* AFTERNOON */}
                 <div>
-                  <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
+                  <p className="text-xs text-gray-700 mb-1 flex items-center gap-1">
                     🌙 Afternoon
                   </p>
 
                   {afternoonSlots.length === 0 && (
-                    <p className="text-xs text-gray-400">No slots</p>
+                    <p className="text-xs text-gray-600">No slots</p>
                   )}
 
                   <div className="space-y-1">
                     {afternoonSlots.map((slot) => (
                       <div
                         key={slot.id}
-                        className="bg-purple-600/10 text-purple-700 text-xs font-medium rounded-lg px-2 py-1 text-center"
+                        className="bg-purple-100 text-purple-800 text-xs font-medium rounded-lg px-2 py-1 text-center"
                       >
                         {slot.start_time} → {slot.end_time}
                       </div>
