@@ -9,99 +9,175 @@ export default function Hero() {
   return (
     <>
       {/* ================= HERO ================= */}
-      <section className="relative w-full pt-20 hero-mobile-fix bg-linear-to-br from-blue-50 to-white">
-        <div
-          className="relative z-10 max-w-7xl mx-auto
-                     min-h-[calc(100vh-80px)]
-                     flex flex-col md:flex-row
-                     items-center justify-center
-                     px-6 gap-12"
-        >
-          {/* ================= LEFT : VIDEO PREVIEW ================= */}
-          <div className="w-full md:w-[60%] flex items-center justify-center">
-            <div
-              className="relative w-full max-w-175
-                         aspect-video
-                         rounded-3xl
-                         bg-blue-200
-                         p-4 md:p-5"
-            >
-              <div className="w-full h-full rounded-2xl overflow-hidden bg-black pop-in1">
-                <video
-                  src="/cerveau.mp4"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="w-full h-full object-cover"
-                />
+      <section className="relative w-full overflow-hidden hero-mobile-fix bg-[#0f172a] pt-20">
+        {/* BACKGROUND ACCENTS (SOFT DARK) */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute left-[-100px] top-10 h-72 w-72 rounded-full bg-cyan-500/15 blur-3xl" />
+          <div className="absolute right-[-80px] top-0 h-80 w-80 rounded-full bg-violet-500/15 blur-3xl" />
+          <div className="absolute bottom-[-80px] left-1/3 h-72 w-72 rounded-full bg-emerald-500/15 blur-3xl" />
+
+          {/* LIGHT SOFT OVERLAY */}
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),transparent_35%,transparent_70%,rgba(255,255,255,0.04))]" />
+        </div>
+
+        <div className="relative z-10 mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-none flex-col items-center justify-center gap-8 px-1 py-10 sm:px-2 lg:flex-row lg:gap-10 lg:px-3">
+          {/* ================= LEFT ================= */}
+          <div className="flex w-full items-center justify-center lg:w-[58%]">
+            <div className="relative w-full max-w-[980px]">
+              {/* FLOATING CARD */}
+              <div className="absolute left-3 top-3 z-10 hidden rounded-2xl border border-white/10 bg-[#0b1220]/90 px-4 py-3 shadow-xl backdrop-blur-xl sm:block">
+                <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">
+                  Live platform preview
+                </p>
+                <p className="mt-1 text-sm font-semibold text-white">
+                  Appointment booking experience
+                </p>
+              </div>
+
+              <div className="relative aspect-video w-full rounded-[34px] border border-white/10 bg-[#0b1220] p-3 shadow-2xl backdrop-blur-xl sm:p-4 md:p-5">
+                <div className="relative h-full w-full rounded-[26px] border border-white/10 bg-[#0f1b2e] p-2 sm:p-3">
+                  <div className="relative h-full w-full overflow-hidden rounded-[20px] bg-black">
+                    <video
+                      src="/cerveau.mp4"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                </div>
+
+                {/* STATS */}
+                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  <MiniPill label="Booking" value="Fast" />
+                  <MiniPill label="Access" value="Secure" />
+                  <MiniPill label="Workflow" value="Modern" />
+                </div>
+              </div>
+
+              {/* FLOATING CARD */}
+              <div className="absolute -bottom-3 right-3 z-10 hidden max-w-[260px] rounded-2xl border border-white/10 bg-[#0b1220]/90 px-4 py-3 shadow-xl backdrop-blur-xl sm:block">
+                <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">
+                  Real-time experience
+                </p>
+                <p className="mt-1 text-sm font-semibold text-white">
+                  Smooth scheduling & secure access
+                </p>
               </div>
             </div>
           </div>
 
-          {/* ================= RIGHT : TEXT ================= */}
-          <div className="w-full md:w-[40%] text-center md:text-left">
-            <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-900 pop-in">
-              Your Healthcare Appointment Solution
-            </h1>
+          {/* ================= RIGHT ================= */}
+          <div className="w-full lg:w-[42%]">
+            <div className="rounded-[34px] border border-white/10 bg-white/[0.06] p-5 text-center shadow-2xl backdrop-blur-xl sm:p-6 lg:p-7 lg:text-left">
+              <div className="inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-500/15 px-4 py-1.5 text-[11px] uppercase tracking-[0.18em] text-cyan-200">
+                Healthcare platform
+              </div>
 
-            <p className="mt-6 text-base sm:text-lg md:text-xl text-gray-600 max-w-xl mx-auto md:mx-0 pop-in1">
-              Book, schedule, and manage medical appointments easily with
-              real-time availability and secure access for patients and doctors.
-            </p>
+              <h1 className="mt-5 text-3xl font-bold text-white sm:text-4xl md:text-5xl xl:text-6xl">
+                Your Healthcare Appointment Solution
+              </h1>
 
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center md:justify-start pop-in2">
-              {/* WATCH DEMO */}
-              <button
-                onClick={() => setOpen(true)}
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 transition"
-              >
-                ▶ Watch Demo
-              </button>
+              <p className="mx-auto mt-6 max-w-xl text-base leading-8 text-slate-300 sm:text-lg md:text-xl lg:mx-0">
+                Book, schedule, and manage medical appointments with real-time
+                availability and secure access.
+              </p>
 
-              <Link href="/login" className="w-full sm:w-auto">
-                <button className="w-full px-8 py-4 rounded-full bg-white text-gray-800 font-semibold shadow-md hover:bg-gray-100 transition">
-                  👤 Login
+              {/* VALUE CARDS */}
+              <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+                <ValueCard
+                  title="Real-Time"
+                  text="Live availability updates."
+                />
+                <ValueCard title="Secure" text="Protected workflow." />
+                <ValueCard title="Simple" text="Smooth booking." />
+              </div>
+
+              {/* BUTTONS */}
+              <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:justify-center lg:justify-start">
+                <button
+                  onClick={() => setOpen(true)}
+                  className="w-full rounded-full bg-gradient-to-r from-cyan-400 to-sky-500 px-8 py-4 font-semibold text-slate-900 shadow-lg transition hover:-translate-y-0.5 sm:w-auto"
+                >
+                  ▶ Watch Demo
                 </button>
-              </Link>
 
-              <Link href="/register" className="w-full sm:w-auto">
-                <button className="w-full px-8 py-4 rounded-full border border-blue-600 text-blue-600 font-semibold hover:bg-blue-600 hover:text-white transition">
-                  Register
-                </button>
-              </Link>
+                <Link href="/login" className="w-full sm:w-auto">
+                  <button className="w-full rounded-full border border-white/10 bg-white/[0.08] px-8 py-4 font-semibold text-white hover:bg-white/[0.12]">
+                    Login
+                  </button>
+                </Link>
+
+                <Link href="/register" className="w-full sm:w-auto">
+                  <button className="w-full rounded-full border border-cyan-400/20 bg-cyan-500/15 px-8 py-4 font-semibold text-cyan-100 hover:bg-cyan-500/20">
+                    Register
+                  </button>
+                </Link>
+              </div>
+
+              {/* TRUST */}
+              <div className="mt-8 rounded-[28px] border border-white/10 bg-white/[0.05] p-4">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  <TrustItem label="Patients" value="Easy booking" />
+                  <TrustItem label="Doctors" value="Clear control" />
+                  <TrustItem label="Platform" value="Mobile ready" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ================= DEMO VIDEO MODAL ================= */}
+      {/* MODAL */}
       {open && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div className="relative w-full max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden">
-            {/* CLOSE BUTTON */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
+          <div className="relative aspect-video w-full max-w-5xl overflow-hidden rounded-[28px] border border-white/10 bg-[#0b1220] shadow-2xl">
             <button
               onClick={() => setOpen(false)}
-              className="absolute top-3 right-3 z-10
-                         bg-black/60 text-white
-                         rounded-full w-10 h-10
-                         flex items-center justify-center
-                         hover:bg-black transition"
+              className="absolute right-3 top-3 z-10 h-10 w-10 rounded-full bg-black/50 text-white"
             >
               ✕
             </button>
 
-            {/* VIDEO */}
             <video
               src="/demos.mp4"
               controls
               autoPlay
-              playsInline
-              className="w-full h-full object-contain"
+              className="h-full w-full object-contain bg-black"
             />
           </div>
         </div>
       )}
     </>
+  );
+}
+
+/* COMPONENTS */
+
+function MiniPill({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-center">
+      <p className="text-[11px] text-slate-400">{label}</p>
+      <p className="mt-1 text-sm font-semibold text-white">{value}</p>
+    </div>
+  );
+}
+
+function ValueCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-4">
+      <p className="text-sm font-semibold text-white">{title}</p>
+      <p className="mt-2 text-sm text-slate-400">{text}</p>
+    </div>
+  );
+}
+
+function TrustItem({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-[#0f1b2e]/70 px-4 py-3 text-center">
+      <p className="text-[11px] text-slate-400">{label}</p>
+      <p className="mt-1 text-sm font-semibold text-slate-200">{value}</p>
+    </div>
   );
 }

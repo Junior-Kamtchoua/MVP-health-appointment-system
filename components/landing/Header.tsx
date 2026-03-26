@@ -9,126 +9,183 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 pop-in1">
-      <div
-        className="max-w-7xl mx-auto px-6 py-2
-                   flex items-center justify-between
-                   bg-white/80 backdrop-blur-md
-                   border-b border-black/5"
-      >
-        {/* Logo */}
-        <div className="flex items-center gap-2">
-          <Image
-            src="/logo.png"
-            alt="HealthTrack Logo"
-            width={120}
-            height={40}
-            priority
-            className="h-auto w-auto"
-          />
-        </div>
+    <header className="fixed left-0 top-0 z-50 w-full pop-in1">
+      <div className="mx-auto w-full max-w-none px-1 sm:px-2 lg:px-3">
+        <div className="mt-2 flex items-center justify-between rounded-[24px] border border-white/10 bg-[#07111f]/80 px-4 py-3 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:px-5 lg:px-6">
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <Link href="#" className="flex items-center gap-3">
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2">
+                <Image
+                  src="/logo.png"
+                  alt="HealthTrack Logo"
+                  width={120}
+                  height={40}
+                  priority
+                  className="h-auto w-auto"
+                />
+              </div>
+            </Link>
+          </div>
 
-        {/* Navigation Desktop */}
-        <nav className="hidden md:flex gap-8 text-gray-700 font-medium">
-          <Link href="#" className="hover:text-blue-600 transition">
-            Home
-          </Link>
-          <Link href="#about" className="hover:text-blue-600 transition">
-            About
-          </Link>
-          <Link href="#features" className="hover:text-blue-600 transition">
-            Features
-          </Link>
-          <Link href="#faq" className="hover:text-blue-600 transition">
-            FAQ
-          </Link>
-          <Link href="#contact" className="hover:text-blue-600 transition">
-            Contact
-          </Link>
-        </nav>
-
-        {/* Actions Desktop */}
-        <div className="hidden md:flex gap-3">
-          <Link
-            href="/login"
-            className="px-4 py-1.5 rounded-lg
-                       text-gray-700 border border-gray-300
-                       hover:bg-gray-100 transition"
-          >
-            Login
-          </Link>
-
-          <Link
-            href="/register"
-            className="px-4 py-1.5 rounded-lg
-                       bg-blue-600 text-white
-                       hover:bg-blue-700 transition"
-          >
-            Register
-          </Link>
-        </div>
-
-        {/* Hamburger (Mobile) */}
-        <button
-          onClick={() => setOpen(true)}
-          className="md:hidden text-gray-700"
-        >
-          <Menu size={26} />
-        </button>
-      </div>
-
-      {/* ===== Mobile Menu ===== */}
-      <div
-        className={`fixed inset-0 z-50 bg-black/40 transition-opacity md:hidden ${
-          open
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
-        onClick={() => setOpen(false)}
-      >
-        <div
-          className={`absolute top-0 right-0 h-full w-72 bg-white p-6
-                      transition-transform duration-300
-                      ${open ? "translate-x-0" : "translate-x-full"}`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Close */}
-          <button className="mb-6 text-gray-700" onClick={() => setOpen(false)}>
-            <X size={24} />
-          </button>
-
-          {/* Mobile Nav */}
-          <nav className="flex flex-col gap-5 text-gray-700 font-medium">
-            <Link href="#" onClick={() => setOpen(false)}>
+          {/* Navigation Desktop */}
+          <nav className="hidden items-center gap-2 md:flex">
+            <Link
+              href="#"
+              className="rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/[0.06] hover:text-white"
+            >
               Home
             </Link>
-            <Link href="#about" onClick={() => setOpen(false)}>
+            <Link
+              href="#about"
+              className="rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/[0.06] hover:text-white"
+            >
               About
             </Link>
-            <Link href="#features" onClick={() => setOpen(false)}>
+            <Link
+              href="#features"
+              className="rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/[0.06] hover:text-white"
+            >
               Features
             </Link>
-            <Link href="#faq" onClick={() => setOpen(false)}>
+            <Link
+              href="#faq"
+              className="rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/[0.06] hover:text-white"
+            >
               FAQ
             </Link>
-            <Link href="#contact" onClick={() => setOpen(false)}>
+            <Link
+              href="#contact"
+              className="rounded-full px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/[0.06] hover:text-white"
+            >
               Contact
             </Link>
           </nav>
 
-          {/* Mobile Actions */}
-          <div className="mt-8 flex flex-col gap-3">
+          {/* Actions Desktop */}
+          <div className="hidden items-center gap-3 md:flex">
             <Link
               href="/login"
-              className="px-4 py-2 rounded-lg
-                         border border-gray-300 text-center"
+              className="rounded-full border border-white/10 bg-white/[0.04] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/[0.08]"
+            >
+              Login
+            </Link>
+
+            <Link
+              href="/register"
+              className="rounded-full bg-gradient-to-r from-cyan-400 to-sky-500 px-5 py-2.5 text-sm font-semibold text-slate-950 shadow-[0_12px_30px_rgba(34,211,238,0.20)] transition hover:-translate-y-0.5"
+            >
+              Register
+            </Link>
+          </div>
+
+          {/* Hamburger (Mobile) */}
+          <button
+            onClick={() => setOpen(true)}
+            className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-slate-200 transition hover:bg-white/[0.08] md:hidden"
+            aria-label="Open menu"
+          >
+            <Menu size={22} />
+          </button>
+        </div>
+      </div>
+
+      {/* ===== Mobile Menu ===== */}
+      <div
+        className={`fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity md:hidden ${
+          open
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
+        }`}
+        onClick={() => setOpen(false)}
+      >
+        <div
+          className={`absolute right-0 top-0 flex h-full w-80 max-w-[90vw] flex-col border-l border-white/10 bg-[#07111f]/95 p-6 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl transition-transform duration-300 ${
+            open ? "translate-x-0" : "translate-x-full"
+          }`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Top */}
+          <div className="mb-8 flex items-center justify-between">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2">
+              <Image
+                src="/logo.png"
+                alt="HealthTrack Logo"
+                width={110}
+                height={36}
+                className="h-auto w-auto"
+              />
+            </div>
+
+            <button
+              className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-slate-200 transition hover:bg-white/[0.08]"
+              onClick={() => setOpen(false)}
+              aria-label="Close menu"
+            >
+              <X size={22} />
+            </button>
+          </div>
+
+          {/* Mobile Nav */}
+          <nav className="flex flex-col gap-3">
+            <Link
+              href="#"
+              onClick={() => setOpen(false)}
+              className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-medium text-slate-200 transition hover:bg-white/[0.06]"
+            >
+              Home
+            </Link>
+            <Link
+              href="#about"
+              onClick={() => setOpen(false)}
+              className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-medium text-slate-200 transition hover:bg-white/[0.06]"
+            >
+              About
+            </Link>
+            <Link
+              href="#features"
+              onClick={() => setOpen(false)}
+              className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-medium text-slate-200 transition hover:bg-white/[0.06]"
+            >
+              Features
+            </Link>
+            <Link
+              href="#faq"
+              onClick={() => setOpen(false)}
+              className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-medium text-slate-200 transition hover:bg-white/[0.06]"
+            >
+              FAQ
+            </Link>
+            <Link
+              href="#contact"
+              onClick={() => setOpen(false)}
+              className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm font-medium text-slate-200 transition hover:bg-white/[0.06]"
+            >
+              Contact
+            </Link>
+          </nav>
+
+          {/* Mobile Info */}
+          <div className="mt-6 rounded-[24px] border border-cyan-400/15 bg-cyan-500/10 p-4">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-cyan-200">
+              HealthTrack
+            </p>
+            <p className="mt-2 text-sm leading-6 text-slate-300">
+              A smoother healthcare booking experience for patients and doctors.
+            </p>
+          </div>
+
+          {/* Mobile Actions */}
+          <div className="mt-auto flex flex-col gap-3 pt-8">
+            <Link
+              href="/login"
+              className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/[0.08]"
             >
               Login
             </Link>
             <Link
               href="/register"
-              className="px-4 py-2 rounded-lg
-                         bg-blue-600 text-white text-center"
+              className="rounded-2xl bg-gradient-to-r from-cyan-400 to-sky-500 px-4 py-3 text-center text-sm font-semibold text-slate-950 shadow-[0_12px_30px_rgba(34,211,238,0.20)] transition hover:-translate-y-0.5"
             >
               Register
             </Link>

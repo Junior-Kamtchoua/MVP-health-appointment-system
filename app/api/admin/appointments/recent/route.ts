@@ -1,41 +1,56 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { createServerClient } from "@supabase/ssr";
+import { getSupabaseServer } from "@/lib/supabase/server";
+
+/* ================= GET ================= */
 
 export async function GET() {
-  // ⚠️ cookies() est ASYNC
-  const cookieStore = await cookies();
+  try {
+    const supabase = await getSupabaseServer();
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll: () => cookieStore.getAll(),
-        setAll: () => {},
-      },
+    /* 🔐 AUTH CHECK */
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-  );
 
-  const { data, error } = await supabase
-    .from("appointments")
-    .select(
-      `
-      patient_name,
-      patient_email,
-      doctor_email,
-      appointment_date,
-      appointment_time,
-      status,
-      created_at
-    `
-    )
-    .order("created_at", { ascending: false })
-    .limit(10);
+    /* 📊 FETCH RECENT APPOINTMENTS */
+    const { data, error } = await supabase
+      .from("appointments")
+      .select(
+        `
+        patient_name,
+        patient_email,
+        doctor_email,
+        appointment_date,
+        appointment_time,
+        status,
+        created_at
+      `,
+      )
+      .order("created_at", { ascending: false })
+      .limit(10);
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) {
+      console.error("RECENT APPOINTMENTS ERROR:", error);
+
+      return NextResponse.json(
+        { error: "Failed to fetch recent appointments" },
+        { status: 500 },
+      );
+    }
+
+    /* ✅ SUCCESS */
+    return NextResponse.json(data ?? []);
+  } catch (err) {
+    console.error("API /admin/appointments/recent error:", err);
+
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
-
-  return NextResponse.json(data || []);
 }

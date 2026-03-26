@@ -1,32 +1,45 @@
 import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import { getSupabaseServer } from "@/lib/supabase/server";
+
+/* ================= GET ================= */
 
 export async function GET() {
-  const cookieStore = await cookies();
+  try {
+    const supabase = await getSupabaseServer();
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll: () => cookieStore.getAll(),
-        setAll: () => {},
-      },
+    /* 🔐 AUTH CHECK */
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-  );
 
-  const { data, error } = await supabase
-    .from("doctors")
-    .select("id, full_name, email")
-    .order("full_name");
+    /* 📊 FETCH DOCTORS */
+    const { data, error } = await supabase
+      .from("doctors")
+      .select("id, full_name, email")
+      .order("full_name", { ascending: true });
 
-  if (error) {
+    if (error) {
+      console.error("DOCTORS FETCH ERROR:", error);
+
+      return NextResponse.json(
+        { error: "Failed to fetch doctors" },
+        { status: 500 },
+      );
+    }
+
+    /* ✅ SUCCESS */
+    return NextResponse.json(data ?? []);
+  } catch (err) {
+    console.error("API /admin/doctors error:", err);
+
     return NextResponse.json(
-      { error: "Failed to fetch doctors" },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }
-
-  return NextResponse.json(data || []);
 }

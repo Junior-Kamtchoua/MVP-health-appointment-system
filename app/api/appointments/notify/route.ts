@@ -1,6 +1,42 @@
 import { NextResponse } from "next/server";
 import { sendEmail } from "@/lib/email";
 
+/* ================= HELPERS ================= */
+
+const statusLabel = (status: string) => {
+  switch (status) {
+    case "pending":
+      return "pending";
+    case "accepted":
+      return "accepted";
+    case "rejected":
+      return "rejected";
+    case "completed":
+      return "completed";
+    case "paid":
+      return "paid";
+    default:
+      return status;
+  }
+};
+
+const statusColor = (status: string) => {
+  switch (status) {
+    case "accepted":
+    case "completed":
+    case "paid":
+      return "green";
+    case "rejected":
+      return "red";
+    case "pending":
+      return "orange";
+    default:
+      return "black";
+  }
+};
+
+/* ================= POST ================= */
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
@@ -15,7 +51,6 @@ export async function POST(req: Request) {
       status,
     } = body;
 
-    // 🛑 Sécurité minimale (évite crash en prod)
     if (
       !patient_email ||
       !doctor_email ||
@@ -25,52 +60,55 @@ export async function POST(req: Request) {
     ) {
       return NextResponse.json(
         { error: "Missing required fields" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    /* ================= PATIENT EMAIL ================= */
+    const safePatientName = patient_name ?? "Patient";
+    const safeDoctorName = doctor_name ?? "Doctor";
+    const safeStatus = statusLabel(status);
+    const color = statusColor(status);
 
-    await sendEmail({
-      to: patient_email,
-      subject: "Your appointment is completed",
-      html: `
-        <p>Hello ${patient_name ?? "Patient"},</p>
+    await Promise.all([
+      sendEmail({
+        to: patient_email,
+        subject: `Your appointment is ${safeStatus}`,
+        html: `
+          <p>Hello ${safePatientName},</p>
 
-        <p>
-          Your appointment with <strong>Dr. ${doctor_name}</strong> has been
-          <strong style="color: green;"> completed</strong>.
-        </p>
+          <p>
+            Your appointment with <strong>Dr. ${safeDoctorName}</strong> is now
+            <strong style="color: ${color};">${safeStatus}</strong>.
+          </p>
 
-        <p>
-          <strong>Date:</strong> ${appointment_date}<br />
-          <strong>Time:</strong> ${appointment_time}
-        </p>
+          <p>
+            <strong>Date:</strong> ${appointment_date}<br />
+            <strong>Time:</strong> ${appointment_time}
+          </p>
 
-        <p>Thank you for trusting our health platform.</p>
-      `,
-    });
+          <p>Thank you for trusting our health platform.</p>
+        `,
+      }),
 
-    /* ================= DOCTOR EMAIL ================= */
+      sendEmail({
+        to: doctor_email,
+        subject: `Appointment ${safeStatus}`,
+        html: `
+          <p>Hello Dr. ${safeDoctorName},</p>
 
-    await sendEmail({
-      to: doctor_email,
-      subject: "Appointment completed",
-      html: `
-        <p>Hello Dr. ${doctor_name},</p>
+          <p>
+            The following appointment is now
+            <strong style="color: ${color};">${safeStatus}</strong>.
+          </p>
 
-        <p>
-          You have successfully marked the following appointment as
-          <strong style="color: green;"> completed</strong>.
-        </p>
-
-        <p>
-          <strong>Patient:</strong> ${patient_name ?? "Unknown"}<br />
-          <strong>Date:</strong> ${appointment_date}<br />
-          <strong>Time:</strong> ${appointment_time}
-        </p>
-      `,
-    });
+          <p>
+            <strong>Patient:</strong> ${safePatientName}<br />
+            <strong>Date:</strong> ${appointment_date}<br />
+            <strong>Time:</strong> ${appointment_time}
+          </p>
+        `,
+      }),
+    ]);
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -78,7 +116,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       { error: "Failed to send notification emails" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
