@@ -1,33 +1,39 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-/* ================= PAGE ================= */
+/* ================= CONTENT ================= */
 
-export default function SuccessPage() {
+function SuccessContent() {
   const searchParams = useSearchParams();
   const appointmentId = searchParams.get("appointmentId");
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-      <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full text-center space-y-6">
+    <div className="min-h-screen flex items-center justify-center bg-[#020617] p-6">
+      <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8 shadow-[0_24px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl max-w-md w-full text-center space-y-6">
         {/* ICON */}
-        <div className="text-green-500 text-6xl">✅</div>
+        <div className="flex justify-center">
+          <div className="h-20 w-20 flex items-center justify-center rounded-full bg-green-500/10 border border-green-400/20 text-green-400 text-3xl">
+            ✓
+          </div>
+        </div>
 
         {/* TITLE */}
-        <h1 className="text-2xl font-bold text-gray-900">Payment Successful</h1>
+        <h1 className="text-2xl font-bold text-white">Payment Successful</h1>
 
         {/* MESSAGE */}
-        <p className="text-gray-600 text-sm leading-relaxed">
+        <p className="text-slate-300 text-sm leading-relaxed">
           Your appointment has been successfully confirmed.
-          <br />A confirmation email will be sent to you shortly.
+          <br />A confirmation email will be sent shortly.
         </p>
 
-        {/* OPTIONAL INFO */}
+        {/* ID */}
         {appointmentId && (
-          <div className="text-xs text-gray-500 break-all">
-            Appointment ID: <span className="font-mono">{appointmentId}</span>
+          <div className="text-xs text-slate-500 break-all">
+            Appointment ID:{" "}
+            <span className="font-mono text-slate-300">{appointmentId}</span>
           </div>
         )}
 
@@ -35,19 +41,35 @@ export default function SuccessPage() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/user/appointments"
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-medium"
+            className="rounded-xl bg-gradient-to-r from-cyan-400 to-sky-500 px-6 py-2 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5"
           >
             View My Appointments
           </Link>
 
           <Link
             href="/user"
-            className="bg-gray-100 text-gray-800 px-6 py-2 rounded-lg hover:bg-gray-200 transition text-sm font-medium"
+            className="rounded-xl border border-white/10 bg-white/[0.04] px-6 py-2 text-sm font-semibold text-white transition hover:bg-white/[0.08]"
           >
             Book Another
           </Link>
         </div>
       </div>
     </div>
+  );
+}
+
+/* ================= PAGE ================= */
+
+export default function SuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#020617] text-white text-sm">
+          Loading confirmation...
+        </div>
+      }
+    >
+      <SuccessContent />
+    </Suspense>
   );
 }
