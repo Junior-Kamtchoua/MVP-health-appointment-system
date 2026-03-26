@@ -79,3 +79,11 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key
 STRIPE_SECRET_KEY=your_key
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_key 4. Run the project
 npm run dev
+
+Author
+
+Junior Kamtchoua
+Full Stack Developer (React / Next.js / Node.js)
+
+Portfolio: https://junior-noundou-portfolio.vercel.app/
+GitHub: https://github.com/Junior-Kamtchoua
