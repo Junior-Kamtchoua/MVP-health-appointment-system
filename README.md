@@ -1,142 +1,81 @@
-# Health Appointment System
+Health Appointment System — Premium SaaS
 
-## Description
+A modern, scalable, and production-ready healthcare appointment platform built with Next.js, TypeScript, Supabase, and Stripe.
 
-**Health Appointment System** is a modern web application for booking medical appointments. It allows patients, doctors, and administrators to interact through dedicated dashboards, with secure authentication and role-based access control driven by the user’s email/profile.
+This project delivers a complete end-to-end booking experience for patients and doctors, including real-time availability, secure authentication, and payment integration.
 
-The main goal is to simplify medical appointment scheduling while providing a smooth, secure, and intuitive user experience.
+Features
 
----
+Authentication & Roles
+Secure login & registration (Supabase Auth)
+Role-based access:
+Patient dashboard
+Doctor dashboard
+Admin-ready architecture
 
-## Key Features
+Smart Booking System
+Real-time doctor availability
+Interactive calendar (monthly view)
+Time slot generation (30 min intervals)
+Automatic conflict prevention (no double booking)
+Slot grouping (Morning / Afternoon / Evening)
 
-### User Flow
+Advanced UX
+Multi-step booking flow
+Live form validation
+Sticky booking summary
+Toast notifications system
+Smooth scroll between steps
+Dark / Light mode toggle
 
-- **Landing Page**: entry point of the application
-- **Register Page**: user account creation
-- **Email Confirmation**: mandatory email verification
-- **Login Page**: secure authentication
-- **Smart role-based redirection**:
+Payments (Stripe)
+Secure checkout session
+Reservation fee system
+Payment confirmation flow
+Success page with appointment tracking
 
-  - 👤 User Page (Patient)
-  - 🩺 Doctor Page (Doctor)
-  - 🛠️ Admin Page (Administrator)
+Doctor Dashboard
+View appointments
+Filter (Today / Pending / Completed)
+Mark appointments as completed
+Real-time stats
 
-### Authentication & Security
+Premium UI
+Modern SaaS design (glassmorphism + gradients)
+Fully responsive (mobile → desktop)
+Clean component architecture
+High-performance rendering
+🛠 Tech Stack
+Frontend
+Next.js (App Router)
+React + TypeScript
+Tailwind CSS
+Backend
+Supabase (Database + Auth)
+PostgreSQL
+Payments
+Stripe API
 
-- Authentication powered by **Supabase Auth**
-- Mandatory email confirmation before access
-- Role management based on email / user profile
-- Protected routes on the frontend
-
-### Payments (if enabled)
-
-- **Stripe** integration for appointment payments
-
----
-
-## Application Flow Diagram
-
-The global navigation flow is as follows:
-
-1. **Landing Page** (starting point)
-2. Two possible actions:
-
-   - Navigate to **Login Page**
-   - Navigate to **Register Page**
-
-3. From **Register Page** → email confirmation → redirect to **Login Page**
-4. After successful authentication:
-
-   - Redirect to **User Page**, **Doctor Page**, or **Admin Page** depending on the user role
-
-_(See the visual diagram included in the project)_
-
----
-
-## Tech Stack
-
-### Frontend
-
-- **Next.js (App Router)**
-- **TypeScript**
-- **Tailwind CSS**
-
-### Backend & Services
-
-- **Supabase** (Authentication, Database, Storage)
-- **Stripe** (Payments)
-
-### Deployment
-
-- **Vercel**
-
----
-
-## Project Structure (simplified)
-
-```
-/app
-  ├── page.tsx           # Landing Page
-  ├── login/             # Login Page
-  ├── register/          # Register Page
-  ├── user/              # User Dashboard
-  ├── doctor/            # Doctor Dashboard
-  ├── admin/             # Admin Dashboard
-/lib
-  ├── supabaseClient.ts  # Supabase configuration
-```
-
----
-
-## Local Installation
+Key Highlights
+Clean architecture (modular & scalable)
+Optimized performance (Next.js 16 + Turbopack)
+Component-based design
+🛡 Secure authentication & data handling
+Production-ready patterns
+Getting Started
 
 1. Clone the repository
-
-```bash
-git clone https://github.com/your-username/health-appointment-system.git
-```
-
+   git clone https://github.com/your-username/health-appointment-system.git
+   cd health-appointment-system
 2. Install dependencies
+   npm install
+3. Setup environment variables
 
-```bash
-npm install
-```
+Create a .env.local file:
 
-3. Configure environment variables
+NEXT_PUBLIC_SUPABASE_URL=your_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key
 
-```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-STRIPE_SECRET_KEY=your_stripe_key
-```
-
-4. Run the project
-
-```bash
+STRIPE_SECRET_KEY=your_key
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_key 4. Run the project
 npm run dev
-```
-
----
-
-## Future Improvements
-
-- Email & SMS notifications
-- Advanced doctor availability management
-- Analytics dashboard (Admin)
-- Appointment history
-- Telemedicine / video consultation
-
----
-
-## Author
-
-**Junior Kamchoua**
-Full Stack Developer
-📍 Next.js • Supabase • TypeScript • AWS
-
----
-
-## License
-
-This project is licensed under the MIT License. You are free to use, modify, and distribute it.
