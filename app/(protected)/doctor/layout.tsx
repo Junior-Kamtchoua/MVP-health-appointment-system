@@ -34,7 +34,7 @@ export default function DoctorLayout({
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  /* ================= PERSISTENCE ================= */
+  /*PERSISTENCE*/
 
   useEffect(() => {
     const savedTheme = localStorage.getItem(THEME_KEY) as ThemeMode | null;
@@ -57,7 +57,7 @@ export default function DoctorLayout({
     localStorage.setItem(SIDEBAR_KEY, String(sidebarCollapsed));
   }, [sidebarCollapsed]);
 
-  /* ================= LOAD DOCTOR ================= */
+  /*LOAD DOCTOR*/
 
   useEffect(() => {
     const loadDoctor = async () => {
@@ -95,7 +95,7 @@ export default function DoctorLayout({
     loadDoctor();
   }, [router]);
 
-  /* ================= THEME ================= */
+  /*THEME*/
 
   const themeClasses = useMemo(() => {
     if (theme === "soft-dark") {
@@ -121,7 +121,7 @@ export default function DoctorLayout({
     };
   }, [theme]);
 
-  /* ================= ACTIVE LINK ================= */
+  /*ACTIVE LINK*/
 
   const navItems = [
     {
@@ -171,7 +171,7 @@ export default function DoctorLayout({
     router.push("/login");
   };
 
-  /* ================= LOADING ================= */
+  /*LOADING*/
 
   if (loading) {
     return (
@@ -188,7 +188,7 @@ export default function DoctorLayout({
     );
   }
 
-  /* ================= UI ================= */
+  /*UI*/
 
   return (
     <div className={cn(themeClasses.page)}>

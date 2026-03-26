@@ -76,19 +76,14 @@ body {
   }
 }
 
-/* ================================
-   3D FEATURES CAROUSEL — FINAL
-================================ */
+/*3D FEATURES CAROUSEL — FINAL*/
 
-/* Section Features (sécurité layout) */
 #features {
   position: relative;
   z-index: 1;
 }
 
-/* ================================
-   CAROUSEL CONTAINER
-================================ */
+/*CAROUSEL CONTAINER*/
 
 .carousel {
   position: relative;
@@ -99,9 +94,7 @@ body {
   isolation: isolate;
 }
 
-/* ================================
-   CAROUSEL TRACK (ROTATION AXIS)
-================================ */
+/*CAROUSEL TRACK (ROTATION AXIS)*/
 
 .carousel-track {
   position: relative;
@@ -115,9 +108,7 @@ body {
   animation-play-state: paused;
 }
 
-/* ================================
-   CAROUSEL ITEM (CARD)
-================================ */
+/*  */
 
 .carousel-item {
   position: absolute;
@@ -130,11 +121,9 @@ body {
   transform-style: preserve-3d;
   transform-origin: center center;
 
-  /* 🚫 PAS de translate(-50%, -50%) */
   transform: rotateY(calc((var(--position) - 1) * (360deg / var(--quantity))))
     translateZ(520px);
 
-  /* centrage réel */
   margin-left: -160px;
   margin-top: -180px;
 
@@ -144,19 +133,15 @@ body {
     opacity 0.6s ease;
 }
 
-/* Carte visible (avant) */
 .carousel-item:nth-child(1) {
   opacity: 1;
 }
 
-/* Empêche miroir arrière */
 .carousel-item > div {
   backface-visibility: hidden;
 }
 
-/* ================================
-   ROTATION ANIMATION
-================================ */
+/*ROTATION ANIMATION*/
 
 @keyframes rotateCarousel {
   from {
@@ -167,9 +152,7 @@ body {
   }
 }
 
-/* ================================
-   RESPONSIVE — MOBILE FALLBACK
-================================ */
+/*RESPONSIVE — MOBILE FALLBACK*/
 
 @media (max-width: 768px) {
   .carousel {
@@ -200,9 +183,7 @@ body {
   }
 }
 
-/* ========================= */
 /* MOBILE : infinite horizontal scroll */
-/* ========================= */
 
 @media (max-width: 639px) {
   .carousel {
@@ -244,9 +225,7 @@ body {
   }
 }
 
-/* ========================= */
 /* VISIBILITY RULES */
-/* ========================= */
 
 .features-carousel {
   display: none;
@@ -260,9 +239,7 @@ body {
   display: none;
 }
 
-/* ========================= */
 /* >= 1300px → carousel */
-/* ========================= */
 
 @media (min-width: 1300px) {
   .features-carousel {
@@ -270,9 +247,7 @@ body {
   }
 }
 
-/* ========================= */
 /* 500px – 1299px → infinite scroll */
-/* ========================= */
 
 @media (max-width: 1299px) and (min-width: 500px) {
   .features-scroll {
@@ -297,9 +272,7 @@ body {
   }
 }
 
-/* ========================= */
 /* < 500px → grid + animation */
-/* ========================= */
 
 @media (max-width: 499px) {
   .features-grid {
@@ -355,9 +328,7 @@ body {
   }
 }
 
-/* ========================= */
 /* Animations */
-/* ========================= */
 
 @keyframes features-scroll {
   from {

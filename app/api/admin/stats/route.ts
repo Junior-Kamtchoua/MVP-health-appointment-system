@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase/server";
 
-/* ================= GET ================= */
+/*GET*/
 
 export async function GET() {
   try {

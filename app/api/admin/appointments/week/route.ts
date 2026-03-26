@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase/server";
 
-/* ================= CONST ================= */
+/*CONST*/
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
 
@@ -10,13 +10,13 @@ type AppointmentWeekRow = {
   total: number;
 };
 
-/* ================= GET ================= */
+/*GET*/
 
 export async function GET() {
   try {
     const supabase = await getSupabaseServer();
 
-    /* 🔐 AUTH CHECK */
+    /* AUTH CHECK */
     const {
       data: { user },
       error: authError,
@@ -26,7 +26,7 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    /* 📊 RPC CALL */
+    /* RPC CALL */
     const { data, error } = await supabase.rpc("appointments_this_week");
 
     if (error || !data) {
@@ -40,7 +40,7 @@ export async function GET() {
 
     const rows = data as AppointmentWeekRow[];
 
-    /* 🧠 NORMALIZE (always return 7 days) */
+    /* NORMALIZE (always return 7 days) */
     const result = DAYS.map((day, index) => {
       const row = rows.find((d) => d.dow === index);
 
@@ -50,7 +50,7 @@ export async function GET() {
       };
     });
 
-    /* ✅ SUCCESS */
+    /* SUCCESS */
     return NextResponse.json(result);
   } catch (err) {
     console.error("API /admin/appointments/week error:", err);

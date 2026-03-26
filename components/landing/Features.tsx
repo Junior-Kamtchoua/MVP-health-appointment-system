@@ -101,8 +101,6 @@ export default function Features() {
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),transparent_30%,transparent_70%,rgba(255,255,255,0.04))]" />
       </div>
 
-      {/* 👉 LE RESTE DE TON CODE CONTINUE EXACTEMENT COMME AVANT (NON MODIFIÉ) */}
-
       <div className="relative z-20 mx-auto w-full max-w-none px-1 sm:px-2 lg:px-3">
         {/* TEXT */}
         <div className="mx-auto max-w-5xl text-center">
@@ -157,7 +155,7 @@ export default function Features() {
           </div>
         </div>
 
-        {/* ================= CAROUSEL (>=1300px) ================= */}
+        {/*CAROUSEL (>=1300px)*/}
         <div className="features-carousel mt-16">
           <div className="carousel">
             <div className="carousel-track" style={sliderStyle}>
@@ -194,7 +192,7 @@ export default function Features() {
           </div>
         </div>
 
-        {/* ============ SCROLL INFINI (<1300px && >=500px) ============ */}
+        {/*SCROLL INFINI (<1300px && >=500px)*/}
         <div className="features-scroll mt-14 overflow-hidden">
           <div
             ref={trackRef}
@@ -229,7 +227,7 @@ export default function Features() {
           </div>
         </div>
 
-        {/* ================= GRID (<500px) ================= */}
+        {/*GRID (<500px)*/}
         <div className="features-grid mt-12">
           <div className="grid grid-cols-1 gap-5">
             {cards.map((card, index) => (

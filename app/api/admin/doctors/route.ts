@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase/server";
 
-/* ================= GET ================= */
+/*GET*/
 
 export async function GET() {
   try {
     const supabase = await getSupabaseServer();
 
-    /* 🔐 AUTH CHECK */
+    /* AUTH CHECK */
     const {
       data: { user },
       error: authError,
@@ -17,7 +17,7 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    /* 📊 FETCH DOCTORS */
+    /* FETCH DOCTORS */
     const { data, error } = await supabase
       .from("doctors")
       .select("id, full_name, email")
@@ -32,7 +32,7 @@ export async function GET() {
       );
     }
 
-    /* ✅ SUCCESS */
+    /* SUCCESS */
     return NextResponse.json(data ?? []);
   } catch (err) {
     console.error("API /admin/doctors error:", err);

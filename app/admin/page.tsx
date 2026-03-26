@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import AppointmentsChart from "@/components/admin/AppointmentsChart";
 import AppointmentsStatusPie from "@/components/admin/AppointmentsStatusPie";
 
-/* ================= TYPES ================= */
+/*TYPES*/
 
 type Stats = {
   totalDoctors: number;
@@ -43,7 +43,7 @@ type ToastItem = {
   message: string;
 };
 
-/* ================= HELPERS ================= */
+/*HELPERS*/
 
 const cn = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
@@ -112,7 +112,7 @@ const getInitials = (name: string) =>
     .map((part) => part[0]?.toUpperCase() || "")
     .join("");
 
-/* ================= PAGE ================= */
+/*PAGE*/
 
 export default function AdminPage() {
   const [stats, setStats] = useState<Stats | null>(null);
@@ -131,7 +131,7 @@ export default function AdminPage() {
   const [today, setToday] = useState("");
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
-  /* ================= TOAST ================= */
+  /*TOAST*/
 
   const addToast = (
     type: ToastItem["type"],
@@ -147,7 +147,7 @@ export default function AdminPage() {
     }, duration);
   };
 
-  /* ================= FETCH ================= */
+  /*FETCH*/
 
   const fetchData = async (silent = false) => {
     try {
@@ -287,7 +287,7 @@ export default function AdminPage() {
     });
   }, [doctorSearch, doctors]);
 
-  /* ================= UI ================= */
+  /*UI*/
 
   return (
     <>
@@ -711,7 +711,7 @@ export default function AdminPage() {
   );
 }
 
-/* ================= COMPONENTS ================= */
+/*COMPONENTS*/
 
 function MiniTopBadge({
   label,

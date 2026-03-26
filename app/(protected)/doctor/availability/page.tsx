@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 
-/* ================= TYPES ================= */
+/* TYPES */
 
 type Doctor = {
   id: string;
@@ -26,7 +26,7 @@ type ToastItem = {
 
 type FilterType = "all" | "morning" | "afternoon" | "evening";
 
-/* ================= HELPERS ================= */
+/* HELPERS */
 
 const cn = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
@@ -83,7 +83,7 @@ const sortAvailabilities = (list: Availability[]) =>
     return a.start_time.localeCompare(b.start_time);
   });
 
-/* ================= PAGE ================= */
+/* PAGE */
 
 export default function DoctorAvailabilityPage() {
   const [doctor, setDoctor] = useState<Doctor | null>(null);
@@ -112,7 +112,7 @@ export default function DoctorAvailabilityPage() {
     label: "",
   });
 
-  /* ================= TOAST ================= */
+  /*TOAST*/
 
   const addToast = (
     type: ToastItem["type"],
@@ -127,7 +127,7 @@ export default function DoctorAvailabilityPage() {
     }, duration);
   };
 
-  /* ================= LOAD DATA ================= */
+  /*LOAD DATA*/
 
   const loadData = async () => {
     try {
@@ -180,7 +180,7 @@ export default function DoctorAvailabilityPage() {
     loadData();
   }, []);
 
-  /* ================= STATS ================= */
+  /*STATS*/
 
   const stats = useMemo(() => {
     const totalSlots = availabilities.length;
@@ -213,7 +213,7 @@ export default function DoctorAvailabilityPage() {
     };
   }, [availabilities]);
 
-  /* ================= FILTERED LIST ================= */
+  /*FILTERED LIST*/
 
   const filteredAvailabilities = useMemo(() => {
     let list = [...availabilities];
@@ -232,7 +232,7 @@ export default function DoctorAvailabilityPage() {
     return sortAvailabilities(list);
   }, [availabilities, filter, search]);
 
-  /* ================= ADD ================= */
+  /*ADD*/
 
   const addAvailability = async () => {
     if (!doctor || submitting) return;
@@ -289,7 +289,7 @@ export default function DoctorAvailabilityPage() {
     }
   };
 
-  /* ================= DELETE ================= */
+  /*DELETE*/
 
   const openDeleteConfirm = (item: Availability) => {
     setConfirmDelete({
@@ -335,7 +335,7 @@ export default function DoctorAvailabilityPage() {
     }
   };
 
-  /* ================= UI ================= */
+  /*UI*/
 
   if (loading) {
     return (
@@ -739,7 +739,7 @@ export default function DoctorAvailabilityPage() {
   );
 }
 
-/* ================= COMPONENTS ================= */
+/*COMPONENTS*/
 
 function MiniTopBadge({
   label,

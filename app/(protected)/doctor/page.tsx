@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 
-/* ================= TYPES ================= */
+/*TYPES*/
 
 type Doctor = {
   id: string;
@@ -52,13 +52,13 @@ type ToastItem = {
   message: string;
 };
 
-/* ================= STORAGE KEYS ================= */
+/*STORAGE KEYS*/
 
 const FILTER_KEY = "doctor-dashboard-filter-v2";
 const SORT_KEY = "doctor-dashboard-sort-v2";
 const SEARCH_KEY = "doctor-dashboard-search-v2";
 
-/* ================= HELPERS ================= */
+/*HELPERS*/
 
 const cn = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
@@ -163,7 +163,7 @@ const compareAppointmentDateTimeDesc = (a: Appointment, b: Appointment) => {
   return right.localeCompare(left);
 };
 
-/* ================= PAGE ================= */
+/*PAGE*/
 
 export default function DoctorPage() {
   const [doctor, setDoctor] = useState<Doctor | null>(null);
@@ -194,7 +194,7 @@ export default function DoctorPage() {
 
   const today = getTodayString();
 
-  /* ================= TOAST ================= */
+  /*TOAST*/
 
   const addToast = (
     type: ToastItem["type"],
@@ -210,7 +210,7 @@ export default function DoctorPage() {
     }, duration);
   };
 
-  /* ================= PERSISTENCE ================= */
+  /*PERSISTENCE*/
 
   useEffect(() => {
     const savedFilter = localStorage.getItem(FILTER_KEY) as FilterType | null;
@@ -234,7 +234,7 @@ export default function DoctorPage() {
     localStorage.setItem(SEARCH_KEY, search);
   }, [search]);
 
-  /* ================= LOAD DATA ================= */
+  /*LOAD DATA*/
 
   const loadData = async (showLoader = false) => {
     try {
@@ -292,7 +292,7 @@ export default function DoctorPage() {
     loadData();
   }, []);
 
-  /* ================= AUTO REFRESH ================= */
+  /*AUTO REFRESH*/
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -302,7 +302,7 @@ export default function DoctorPage() {
     return () => window.clearInterval(interval);
   }, []);
 
-  /* ================= STATS ================= */
+  /*STATS*/
 
   const stats = useMemo(() => {
     const todayAppointments = appointments.filter(
@@ -336,7 +336,7 @@ export default function DoctorPage() {
       .sort(compareAppointmentDateTimeAsc)[0];
   }, [appointments, today]);
 
-  /* ================= FILTER + SEARCH + SORT ================= */
+  /*FILTER + SEARCH + SORT*/
 
   const filteredAppointments = useMemo(() => {
     let list = [...appointments];
@@ -409,7 +409,7 @@ export default function DoctorPage() {
     return Array.from(groups.entries());
   }, [filteredAppointments]);
 
-  /* ================= ACTIONS ================= */
+  /*ACTIONS*/
 
   const openConfirm = (
     id: string,
@@ -474,7 +474,7 @@ export default function DoctorPage() {
     }
   };
 
-  /* ================= UI ================= */
+  /*UI*/
 
   if (loading) {
     return (
@@ -865,7 +865,7 @@ export default function DoctorPage() {
   );
 }
 
-/* ================= COMPONENTS ================= */
+/*COMPONENTS*/
 
 function MiniTopBadge({
   label,

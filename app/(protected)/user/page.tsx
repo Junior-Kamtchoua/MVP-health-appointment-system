@@ -11,7 +11,7 @@ import {
   type ReactNode,
 } from "react";
 
-/* ================= TYPES ================= */
+/*TYPES*/
 
 type Doctor = {
   id: string;
@@ -73,7 +73,7 @@ type InlineMessage = {
   text: string;
 };
 
-/* ================= CONSTANTS ================= */
+/*CONSTANTS*/
 
 const STORAGE_KEY = "premium-health-booking-form-v3";
 const DARK_STORAGE_KEY = "premium-health-booking-dark-v1";
@@ -97,7 +97,7 @@ const MONTH_LABELS = [
   "December",
 ];
 
-/* ================= UTILS ================= */
+/*UTILS*/
 
 const cn = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
@@ -285,7 +285,7 @@ const getProgress = ({
   return score;
 };
 
-/* ================= SMALL UI ================= */
+/*SMALL UI*/
 
 function SectionCard({
   children,
@@ -555,7 +555,7 @@ function RatingStars({
   );
 }
 
-/* ================= PAGE ================= */
+/*PAGE*/
 
 export default function UserPage() {
   const router = useRouter();
@@ -758,7 +758,7 @@ export default function UserPage() {
     !!patient.email.trim() &&
     !!patient.phone.trim();
 
-  /* ================= HELPERS ================= */
+  /*HELPERS*/
 
   const scrollToRef = (ref: React.RefObject<HTMLElement | null>) => {
     ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -811,7 +811,7 @@ export default function UserPage() {
     }
   };
 
-  /* ================= VALIDATION ================= */
+  /*VALIDATION*/
 
   const validateField = useCallback((key: keyof PatientForm, value: string) => {
     if (key === "fullName") {
@@ -847,7 +847,7 @@ export default function UserPage() {
     return !nextErrors.fullName && !nextErrors.email && !nextErrors.phone;
   }, [patient, validateField]);
 
-  /* ================= LOCAL STORAGE ================= */
+  /*LOCAL STORAGE*/
 
   useEffect(() => {
     const savedDark = localStorage.getItem(DARK_STORAGE_KEY);
@@ -919,7 +919,7 @@ export default function UserPage() {
     }
   }, [selectedDoctor]);
 
-  /* ================= FETCH INITIAL DATA ================= */
+  /*FETCH INITIAL DATA*/
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -981,7 +981,7 @@ export default function UserPage() {
     fetchInitialData();
   }, []);
 
-  /* ================= KEEP SELECTED DOCTOR VALID ================= */
+  /*KEEP SELECTED DOCTOR VALID*/
 
   useEffect(() => {
     if (selectedDoctor && doctors.some((doc) => doc.id === selectedDoctor.id)) {
@@ -1005,7 +1005,7 @@ export default function UserPage() {
     }
   }, [doctors, filteredDoctors, recentDoctorId, selectedDoctor]);
 
-  /* ================= FETCH AVAILABILITIES FOR SELECTED DOCTOR ================= */
+  /*FETCH AVAILABILITIES FOR SELECTED DOCTOR*/
 
   useEffect(() => {
     const fetchAvailabilities = async () => {
@@ -1101,7 +1101,7 @@ export default function UserPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDoctor]);
 
-  /* ================= AUTO SCROLL ================= */
+  /*AUTO SCROLL*/
 
   useEffect(() => {
     if (selectedDoctor) {
@@ -1123,7 +1123,7 @@ export default function UserPage() {
     }
   }, [selectedDate, selectedTime]);
 
-  /* ================= FORM REALTIME VALIDATION ================= */
+  /*FORM REALTIME VALIDATION*/
 
   useEffect(() => {
     setErrors((prev) => ({
@@ -1136,7 +1136,7 @@ export default function UserPage() {
     }));
   }, [patient.fullName, patient.email, patient.phone, validateField]);
 
-  /* ================= BOOKED SLOTS ================= */
+  /*BOOKED SLOTS*/
 
   const loadBookedSlots = useCallback(
     async (date: Date, slots: string[]) => {
@@ -1187,7 +1187,7 @@ export default function UserPage() {
     [addToast, selectedDoctor, selectedTime],
   );
 
-  /* ================= DATE SELECT ================= */
+  /*DATE SELECT*/
 
   const handleSelectDate = useCallback(
     async (calDate: CalendarDate, resetTime = true) => {
@@ -1248,7 +1248,7 @@ export default function UserPage() {
     }
   };
 
-  /* ================= ACTIONS ================= */
+  /*ACTIONS*/
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -1404,7 +1404,7 @@ export default function UserPage() {
     }
   };
 
-  /* ================= UI ================= */
+  /*UI*/
 
   return (
     <div

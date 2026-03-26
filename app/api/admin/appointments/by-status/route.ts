@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase/server";
 
-/* ================= GET ================= */
+/*GET*/
 
 export async function GET() {
   try {
     const supabase = await getSupabaseServer();
 
-    /* 🔐 (OPTIONNEL MAIS RECOMMANDÉ)
-       Vérifier que l'utilisateur est admin */
     const {
       data: { user },
       error: authError,
@@ -18,7 +16,7 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    /* 📊 RPC CALL */
+    /*  RPC CALL */
     const { data, error } = await supabase.rpc("appointments_by_status");
 
     if (error) {
@@ -30,7 +28,7 @@ export async function GET() {
       );
     }
 
-    /* ✅ SUCCESS */
+    /*  SUCCESS */
     return NextResponse.json(data ?? []);
   } catch (err) {
     console.error("API /admin/appointments/by-status error:", err);

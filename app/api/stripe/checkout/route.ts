@@ -2,17 +2,17 @@ import Stripe from "stripe";
 import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase/server";
 
-/* ================= STRIPE ================= */
+/*STRIPE*/
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-/* ================= POST ================= */
+/*POST*/
 
 export async function POST(request: Request) {
   try {
     const supabase = await getSupabaseServer();
 
-    /* 🔐 AUTH CHECK */
+    /* AUTH CHECK */
     const {
       data: { user },
       error: authError,
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
       );
     }
 
-    /* 🔍 VERIFY APPOINTMENT */
+    /* VERIFY APPOINTMENT */
     const { data: appointment, error: appointmentError } = await supabase
       .from("appointments")
       .select("id, patient_id, status")
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
       );
     }
 
-    /* 🔒 SECURITY */
+    /* SECURITY */
     if (appointment.patient_id !== user.id) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
       );
     }
 
-    /* 💳 CREATE SESSION */
+    /* CREATE SESSION */
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],

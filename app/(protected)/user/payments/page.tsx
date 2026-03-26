@@ -16,7 +16,7 @@ export default function UserPaymentsPage() {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
 
-  /* ================= FETCH ================= */
+  /*FETCH*/
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -53,7 +53,7 @@ export default function UserPaymentsPage() {
     fetchPayments();
   }, []);
 
-  /* ================= UI ================= */
+  /*UI*/
 
   if (loading) {
     return (

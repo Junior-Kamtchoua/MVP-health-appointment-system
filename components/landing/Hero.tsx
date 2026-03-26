@@ -8,7 +8,7 @@ export default function Hero() {
 
   return (
     <>
-      {/* ================= HERO ================= */}
+      {/*HERO*/}
       <section className="relative w-full overflow-hidden hero-mobile-fix bg-[#0f172a] pt-20">
         {/* BACKGROUND ACCENTS (SOFT DARK) */}
         <div className="pointer-events-none absolute inset-0">
@@ -21,7 +21,7 @@ export default function Hero() {
         </div>
 
         <div className="relative z-10 mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-none flex-col items-center justify-center gap-8 px-1 py-10 sm:px-2 lg:flex-row lg:gap-10 lg:px-3">
-          {/* ================= LEFT ================= */}
+          {/*LEFT*/}
           <div className="flex w-full items-center justify-center lg:w-[58%]">
             <div className="relative w-full max-w-[980px]">
               {/* FLOATING CARD */}
@@ -68,7 +68,7 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* ================= RIGHT ================= */}
+          {/*RIGHT*/}
           <div className="w-full lg:w-[42%]">
             <div className="rounded-[34px] border border-white/10 bg-white/[0.06] p-5 text-center shadow-2xl backdrop-blur-xl sm:p-6 lg:p-7 lg:text-left">
               <div className="inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-500/15 px-4 py-1.5 text-[11px] uppercase tracking-[0.18em] text-cyan-200">

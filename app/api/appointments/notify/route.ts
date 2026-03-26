@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { sendEmail } from "@/lib/email";
 
-/* ================= HELPERS ================= */
+/*HELPERS*/
 
 const statusLabel = (status: string) => {
   switch (status) {
@@ -35,7 +35,7 @@ const statusColor = (status: string) => {
   }
 };
 
-/* ================= POST ================= */
+/*POST*/
 
 export async function POST(req: Request) {
   try {

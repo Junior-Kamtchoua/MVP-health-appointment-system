@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 
-/* ================= TYPES ================= */
+/*TYPES*/
 
 type PaymentStatus = "paid" | "succeeded" | "pending" | "failed" | string;
 
@@ -34,7 +34,7 @@ type ToastItem = {
   message: string;
 };
 
-/* ================= HELPERS ================= */
+/*HELPERS*/
 
 const cn = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
@@ -73,7 +73,7 @@ const formatDateTimePretty = (value: string) => {
   });
 };
 
-/* ================= PAGE ================= */
+/*PAGE*/
 
 export default function AdminPaymentsPage() {
   const [payments, setPayments] = useState<Payment[]>([]);
@@ -463,7 +463,7 @@ export default function AdminPaymentsPage() {
   );
 }
 
-/* ================= COMPONENTS ================= */
+/*COMPONENTS*/
 
 function MiniTopBadge({
   label,

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 
-/* ================= TYPES ================= */
+/*TYPES*/
 
 type AppointmentStatus =
   | "pending"
@@ -45,7 +45,7 @@ type ToastItem = {
   message: string;
 };
 
-/* ================= HELPERS ================= */
+/*HELPERS*/
 
 const cn = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
@@ -150,7 +150,7 @@ const getPriorityBadge = (appointment: Appointment, today: string) => {
   return null;
 };
 
-/* ================= PAGE ================= */
+/*PAGE*/
 
 export default function DoctorAppointmentsPage() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -165,7 +165,7 @@ export default function DoctorAppointmentsPage() {
 
   const today = getTodayString();
 
-  /* ================= TOAST ================= */
+  /*TOAST*/
 
   const addToast = (
     type: ToastItem["type"],
@@ -180,7 +180,7 @@ export default function DoctorAppointmentsPage() {
     }, duration);
   };
 
-  /* ================= LOAD DATA ================= */
+  /*LOAD DATA */
 
   const loadAppointments = async (silent = false) => {
     try {
@@ -230,7 +230,7 @@ export default function DoctorAppointmentsPage() {
     return () => window.clearInterval(interval);
   }, []);
 
-  /* ================= STATS ================= */
+  /*STATS*/
 
   const stats = useMemo(() => {
     const total = appointments.length;
@@ -260,7 +260,7 @@ export default function DoctorAppointmentsPage() {
     };
   }, [appointments, today]);
 
-  /* ================= FILTER + SORT + SEARCH ================= */
+  /* FILTER + SORT + SEARCH */
 
   const filteredAppointments = useMemo(() => {
     let list = [...appointments];
@@ -333,7 +333,7 @@ export default function DoctorAppointmentsPage() {
     return Array.from(groups.entries());
   }, [filteredAppointments]);
 
-  /* ================= UI ================= */
+  /* UI */
 
   if (loading) {
     return (
@@ -632,7 +632,7 @@ export default function DoctorAppointmentsPage() {
   );
 }
 
-/* ================= COMPONENTS ================= */
+/* COMPONENTS */
 
 function MiniTopBadge({
   label,

@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-/* ================= CONTENT ================= */
+/*CONTENT*/
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -58,7 +58,7 @@ function SuccessContent() {
   );
 }
 
-/* ================= PAGE ================= */
+/*PAGE*/
 
 export default function SuccessPage() {
   return (

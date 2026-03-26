@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 
-/* ================= TYPES ================= */
+/*TYPES*/
 
 type AppointmentStatus =
   | "pending"
@@ -49,7 +49,7 @@ type ToastItem = {
   message: string;
 };
 
-/* ================= HELPERS ================= */
+/*HELPERS*/
 
 const cn = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
@@ -137,7 +137,7 @@ const compareDateTimeDesc = (a: Appointment, b: Appointment) =>
     `${a.appointment_date} ${a.appointment_time}`,
   );
 
-/* ================= PAGE ================= */
+/*PAGE*/
 
 export default function AdminAppointmentsPage() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -583,7 +583,7 @@ export default function AdminAppointmentsPage() {
   );
 }
 
-/* ================= COMPONENTS ================= */
+/*COMPONENTS*/
 
 function MiniTopBadge({
   label,

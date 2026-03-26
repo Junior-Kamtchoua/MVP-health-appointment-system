@@ -2,18 +2,18 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
 
-/* ================= STRIPE ================= */
+/*STRIPE*/
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-/* ================= SUPABASE ADMIN ================= */
+/*SUPABASE ADMIN*/
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
-/* ================= HELPERS ================= */
+/*HELPERS*/
 
 async function sendNotificationEmail(payload: {
   patient_email: string | null;
@@ -39,7 +39,7 @@ async function sendNotificationEmail(payload: {
   }
 }
 
-/* ================= POST ================= */
+/*POST*/
 
 export async function POST(req: Request) {
   try {
@@ -70,9 +70,7 @@ export async function POST(req: Request) {
       );
     }
 
-    /* ======================================================
-       ✅ PAYMENT CONFIRMED
-    ====================================================== */
+    /*PAYMENT CONFIRMED*/
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
       const appointmentId = session.metadata?.appointment_id;
@@ -110,7 +108,6 @@ export async function POST(req: Request) {
         );
       }
 
-      /* Idempotency: if already paid, do not duplicate work */
       if (appointment.status !== "paid") {
         const { error: updateError } = await supabase
           .from("appointments")
@@ -127,7 +124,6 @@ export async function POST(req: Request) {
         }
       }
 
-      /* Avoid duplicate payment insert */
       const { data: existingPayment, error: existingPaymentError } =
         await supabase
           .from("payments")
@@ -190,9 +186,7 @@ export async function POST(req: Request) {
       });
     }
 
-    /* ======================================================
-       ❌ PAYMENT SESSION EXPIRED
-    ====================================================== */
+    /*PAYMENT SESSION EXPIRED*/
     if (event.type === "checkout.session.expired") {
       const session = event.data.object as Stripe.Checkout.Session;
       const appointmentId = session.metadata?.appointment_id;

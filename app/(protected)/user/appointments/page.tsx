@@ -15,7 +15,7 @@ export default function UserAppointmentsPage() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
 
-  /* ================= FETCH ================= */
+  /*FETCH*/
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -52,7 +52,7 @@ export default function UserAppointmentsPage() {
     fetchAppointments();
   }, []);
 
-  /* ================= UI ================= */
+  /*UI*/
 
   if (loading) {
     return (

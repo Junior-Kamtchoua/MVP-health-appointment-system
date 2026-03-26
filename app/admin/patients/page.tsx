@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 
-/* ================= TYPES ================= */
+/* TYPES */
 
 type AppointmentPatientRow = {
   patient_name: string | null;
@@ -32,7 +32,7 @@ type ToastItem = {
   message: string;
 };
 
-/* ================= HELPERS ================= */
+/*HELPERS*/
 
 const cn = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
@@ -61,7 +61,7 @@ const formatDatePretty = (value: string) => {
   });
 };
 
-/* ================= PAGE ================= */
+/*PAGE*/
 
 export default function AdminPatientsPage() {
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -442,7 +442,7 @@ export default function AdminPatientsPage() {
   );
 }
 
-/* ================= COMPONENTS ================= */
+/*COMPONENTS*/
 
 function MiniTopBadge({
   label,

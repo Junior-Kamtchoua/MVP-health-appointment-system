@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 
-/* ================= TYPES ================= */
+/* TYPES */
 
 type ThemeMode = "dark" | "soft-dark";
 
@@ -23,7 +23,7 @@ type NavItem = {
   exact?: boolean;
 };
 
-/* ================= CONSTANTS ================= */
+/* CONSTANTS */
 
 const THEME_KEY = "admin-layout-theme-v1";
 const SIDEBAR_KEY = "admin-layout-sidebar-collapsed-v1";
@@ -36,7 +36,7 @@ const navItems: NavItem[] = [
   { href: "/admin/payments", label: "Payments", icon: "◈" },
 ];
 
-/* ================= HELPERS ================= */
+/*HELPERS*/
 
 const cn = (...classes: Array<string | false | null | undefined>) =>
   classes.filter(Boolean).join(" ");
@@ -46,7 +46,7 @@ const isActivePath = (pathname: string, item: NavItem) => {
   return pathname.startsWith(item.href);
 };
 
-/* ================= NAV COMPONENT ================= */
+/* NAV COMPONENT */
 
 function AdminNav({ pathname, onNavigate, collapsed = false }: AdminNavProps) {
   return (
@@ -78,7 +78,7 @@ function AdminNav({ pathname, onNavigate, collapsed = false }: AdminNavProps) {
   );
 }
 
-/* ================= LAYOUT ================= */
+/*LAYOUT*/
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const router = useRouter();

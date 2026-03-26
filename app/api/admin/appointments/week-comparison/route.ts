@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase/server";
 
-/* ================= TYPES ================= */
+/*TYPES*/
 
 type WeekComparisonRow = {
   dow: number;
@@ -15,11 +15,11 @@ type ChartRow = {
   lastWeek: number;
 };
 
-/* ================= CONST ================= */
+/*CONST*/
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
 
-/* ================= GET ================= */
+/*GET*/
 
 export async function GET() {
   try {
